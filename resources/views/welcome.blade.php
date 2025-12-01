@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style/main.css">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<script src="{{ asset('script/sms-auth.js') }}"></script>
     <title>Document</title>
 </head>
 <body>
@@ -49,6 +50,8 @@
                 <div class="auth-content">
                     <form class="auth-form" id="auth-form">
                         <p class="auth-formText">Укажите номер телефона</p>
+						
+						<p class="auth-error" id="auth-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
                         <input type="tel" placeholder="+7 (000) 000-00-00" required id="phone-input">
                         <button type="submit" class="auth-submit">ПОЛУЧИТЬ SMS КОД</button>
                     </form>
@@ -68,6 +71,8 @@
                 </div>
                 <div class="verification-content">
                     <p class="verification-text">Укажите Код из SMS</p>
+					
+					<p class="verification-error" id="verification-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
                     <form class="verification-form" id="verification-form">
                         <div class="code-inputs">
                             <input type="text" maxlength="1" class="code-input" data-index="0">
@@ -207,7 +212,7 @@
             <img src="assets/wolna.png" alt="" class="mainBlockImgWolna">
         </div>
         <div class="blockDown">
-            <a class="downCheck" href="">Загрузить чек <img src="assets/arrowRight.png"> </a>
+            <a class="downCheck upload-link" href="">Загрузить чек <img src="assets/arrowRight.png"> </a>
         </div>
     </div>
 

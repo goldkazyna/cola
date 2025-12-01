@@ -1,57 +1,3 @@
-// ===== API для работы с сервером =====
-const API = {
-    // CSRF токен для Laravel
-    getCSRFToken() {
-        return document.querySelector('meta[name="csrf-token"]')?.content;
-    },
-
-    // Отправка SMS-кода
-    async sendCode(phone) {
-        const response = await fetch('/auth/send-code', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': this.getCSRFToken(),
-            },
-            body: JSON.stringify({ phone }),
-        });
-        return response.json();
-    },
-
-    // Проверка кода
-    async verifyCode(phone, code) {
-        const response = await fetch('/auth/verify-code', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': this.getCSRFToken(),
-            },
-            body: JSON.stringify({ phone, code }),
-        });
-        return response.json();
-    },
-
-    // Проверка авторизации
-    async checkAuth() {
-        const response = await fetch('/auth/check');
-        return response.json();
-    },
-
-    // Выход
-    async logout() {
-        const response = await fetch('/auth/logout', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': this.getCSRFToken(),
-            },
-        });
-        return response.json();
-    },
-};
-
-// Глобальная переменная для хранения телефона между шагами
-let currentPhone = '';
-
 class Slider {
     constructor(container) {
         this.container = container;
@@ -267,71 +213,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Открытие Загрузить чек из меню
-    if (uploadLink && checksAddWindow) {
-        uploadLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Opening upload checks window from menu');
-            openWindow(checksAddWindow);
-        });
-    }
 
 
-    const uploadFromChecksLinks = document.querySelectorAll('.downCheck, .downChecks'); // Все кнопки "Загрузить чек"
-
-    if (uploadFromChecksLinks.length > 0 && checksAddWindow) {
-        uploadFromChecksLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                openWindow(checksAddWindow);
-            });
-        });
-    }
 
 
-	// Отправка формы авторизации (ввод телефона)
-	if (authForm && authWindow && verificationWindow) {
-		authForm.addEventListener('submit', async function(e) {
-			e.preventDefault();
-			
-			const phoneInput = document.getElementById('phone-input');
-			const submitBtn = authForm.querySelector('.auth-submit');
-			const phone = phoneInput.value.trim();
-			
-			if (!phone) {
-				alert('Введите номер телефона');
-				return;
-			}
-			
-			// Блокируем кнопку
-			submitBtn.disabled = true;
-			submitBtn.textContent = 'ОТПРАВКА...';
-			
-			try {
-				const result = await API.sendCode(phone);
-				
-				if (result.success) {
-					currentPhone = phone;
-					
-					// Для тестирования показываем код в консоли
-					if (result.debug_code) {
-						console.log('DEBUG: SMS код:', result.debug_code);
-					}
-					
-					// Открываем окно верификации
-					openWindow(verificationWindow);
-				} else {
-					alert(result.message || 'Ошибка отправки кода');
-				}
-			} catch (error) {
-				console.error('Ошибка:', error);
-				alert('Ошибка соединения с сервером');
-			} finally {
-				submitBtn.disabled = false;
-				submitBtn.textContent = 'ПОЛУЧИТЬ SMS КОД';
-			}
-		});
-	}
+
+
+
 
     // УПРОЩЕННАЯ ЛОГИКА КЛИКА ПО КНОПКЕ МЕНЮ
     menuButton.addEventListener('click', function(e) {
@@ -618,46 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-	// Отправка формы верификации
-	if (verificationForm) {
-		verificationForm.addEventListener('submit', async function(e) {
-			e.preventDefault();
-			
-			const code = Array.from(codeInputs).map(input => input.value).join('');
-			const submitBtn = verificationForm.querySelector('.verification-submit');
-			
-			if (code.length !== 4) {
-				alert('Введите 4-значный код');
-				return;
-			}
-			
-			submitBtn.disabled = true;
-			submitBtn.textContent = 'ПРОВЕРКА...';
-			
-			try {
-				const result = await API.verifyCode(currentPhone, code);
-				
-				if (result.success) {
-					// Успешная авторизация — открываем "Мои чеки"
-					openWindow(checksWindow);
-					
-					// Очищаем форму
-					codeInputs.forEach(input => {
-						input.value = '';
-						input.classList.remove('filled');
-					});
-				} else {
-					alert(result.message || 'Неверный код');
-				}
-			} catch (error) {
-				console.error('Ошибка:', error);
-				alert('Ошибка соединения с сервером');
-			} finally {
-				submitBtn.disabled = false;
-				submitBtn.textContent = 'Войти';
-			}
-		});
-	}
+
 
     // Таймер
     function startTimer() {
