@@ -1,0 +1,115 @@
+/* ===== Стили для загрузки чеков ===== */
+
+/* Кнопки выбора загрузки */
+.upload-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.upload-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 30px 40px;
+    background: rgba(128, 128, 128, 0.1);
+    border: 2px dashed #ddd;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-option:hover {
+    border-color: #910101;
+    background: rgba(145, 1, 1, 0.05);
+}
+
+.upload-option img {
+    width: 50px;
+    height: 50px;
+    opacity: 0.7;
+}
+
+.upload-option span {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Статусы чеков */
+.check-status {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+}
+
+.check-status.status-approved {
+    background: rgba(34, 139, 34, 0.9);
+}
+
+.check-status.status-rejected {
+    background: rgba(220, 20, 60, 0.9);
+}
+
+/* Сообщение "нет чеков" */
+.no-receipts {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Превью с возможностью удаления */
+.upload-preview {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.upload-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.preview-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.preview-remove:hover {
+    transform: scale(1.1);
+}
+
+.preview-remove img {
+    width: 20px;
+    height: 20px;
+}

@@ -325,46 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Инициализация функциональности загрузки, если элементы существуют
-    if (uploadArea && fileInput && uploadedPreviews && uploadSubmit) {
-        // Клик по области загрузки
-        uploadArea.addEventListener('click', function() {
-            fileInput.click();
-        });
 
-        // Drag and drop функциональность
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
-
-        // Выбор файлов через input
-        fileInput.addEventListener('change', function(e) {
-            handleFiles(e.target.files);
-        });
-
-        // Отправка формы
-        if (uploadForm) {
-            uploadForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (uploadedFiles.length > 0) {
-                    submitFiles();
-                }
-            });
-        }
-    }
 
     // Обработка выбранных файлов
     function handleFiles(files) {

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="style/main.css">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<script src="{{ asset('script/sms-auth.js') }}"></script>
+	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}">
+	<script src="{{ asset('script/receipts.js') }}"></script>
     <title>Document</title>
 </head>
 <body>
@@ -155,12 +157,20 @@
                 <div class="checks-add-content">
                     <form class="upload-form" id="upload-form">
                         <div class="upload-area" id="upload-area">
-                            <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
-                            <div class="upload-icon">
-                                <img src="assets/upload-icon.png" alt="Загрузить">
-                                <p class="upload-title">Прикрепить файл</p>
-                            </div>
-                        </div>
+							<input type="file" id="file-input" accept="image/*" style="display: none;">
+							<input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;">
+							
+							<div class="upload-buttons">
+								<button type="button" class="upload-option" id="gallery-btn">
+									<img src="assets/upload-icon.png" alt="Галерея">
+									<span>Галерея</span>
+								</button>
+								<button type="button" class="upload-option" id="camera-btn">
+									<img src="assets/upload-icon.png" alt="Камера">
+									<span>Камера</span>
+								</button>
+							</div>
+						</div>
 
                         <div class="uploaded-previews" id="uploaded-previews">
                         </div>
@@ -566,5 +576,7 @@
 
 </div>
 <script src="script/index.js"></script>
+
+
 </body>
 </html>
