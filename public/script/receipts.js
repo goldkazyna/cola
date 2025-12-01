@@ -207,65 +207,144 @@ const Receipts = {
         return response.json();
     },
 
-    // ===== Загрузка списка чеков пользователя =====
-    async loadUserReceipts() {
-        const checksGrid = document.querySelector('.checks-grid');
-        const chancesNumber = document.querySelector('.chances-number');
+	// ===== Загрузка списка чеков пользователя =====
+	async loadUserReceipts() {
+		const checksContent = document.querySelector('.checks-content');
+		const chancesNumber = document.querySelector('.chances-number');
 
-        if (!checksGrid) return;
+		if (!checksContent) return;
 
-        try {
-            const response = await fetch('/receipts');
-            const result = await response.json();
+		try {
+			const response = await fetch('/receipts');
+			const result = await response.json();
 
-            if (result.success) {
-                // Обновляем количество шансов
-                if (chancesNumber) {
-                    chancesNumber.textContent = result.chances || 0;
-                }
+			if (result.success) {
+				// Обновляем количество шансов
+				if (chancesNumber) {
+					chancesNumber.textContent = result.chances || 0;
+				}
 
-                // Очищаем и заполняем сетку
-                checksGrid.innerHTML = '';
+				// Обновляем информацию о ближайшем розыгрыше
+				this.updateNextDrawingInfo(result.next_drawing);
 
-                if (result.receipts && result.receipts.length > 0) {
-                    result.receipts.forEach(receipt => {
-                        checksGrid.appendChild(this.createReceiptItem(receipt));
-                    });
-                } else {
-                    checksGrid.innerHTML = '<p class="no-receipts">У вас пока нет загруженных чеков</p>';
-                }
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки чеков:', error);
-        }
-    },
+				// Рендерим чеки по периодам
+				this.renderReceiptsByPeriods(result.periods);
+			}
+		} catch (error) {
+			console.error('Ошибка загрузки чеков:', error);
+		}
+	},
 
-    // ===== Создание элемента чека =====
-    createReceiptItem(receipt) {
-        const div = document.createElement('div');
-        div.className = 'check-item';
-        div.dataset.id = receipt.id;
+	// ===== Информация о ближайшем розыгрыше =====
+	updateNextDrawingInfo(nextDrawing) {
+		let infoBlock = document.querySelector('.next-drawing-info');
+		
+		// Создаём блок если его нет
+		if (!infoBlock) {
+			const chancesBlock = document.querySelector('.chances-count');
+			if (chancesBlock) {
+				infoBlock = document.createElement('div');
+				infoBlock.className = 'next-drawing-info';
+				chancesBlock.after(infoBlock);
+			}
+		}
 
-        let statusClass = '';
-        if (receipt.status === 'approved') statusClass = 'status-approved';
-        if (receipt.status === 'rejected') statusClass = 'status-rejected';
+		if (infoBlock && nextDrawing) {
+			infoBlock.innerHTML = `
+				<p class="next-drawing-title">Ближайший розыгрыш:</p>
+				<p class="next-drawing-name">${nextDrawing.name}</p>
+				<p class="next-drawing-date">${nextDrawing.date_formatted}</p>
+				${nextDrawing.days_left > 0 ? `<p class="next-drawing-days">Осталось ${this.pluralizeDays(nextDrawing.days_left)}</p>` : '<p class="next-drawing-days">Сегодня!</p>'}
+			`;
+		} else if (infoBlock) {
+			infoBlock.innerHTML = '<p class="next-drawing-title">Все розыгрыши завершены</p>';
+		}
+	},
 
-        div.innerHTML = `
-            <img src="${receipt.image_url}" alt="Чек" class="check-image">
-            <div class="check-status ${statusClass}">${receipt.status_text}</div>
-            <button class="delete-check" data-id="${receipt.id}">
-                <img src="assets/close-icon.png" alt="Удалить">
-            </button>
-        `;
+	// ===== Склонение дней =====
+	pluralizeDays(n) {
+		n = Math.ceil(n); // Округляем вверх
+		const forms = ['день', 'дня', 'дней'];
+		const n1 = Math.abs(n) % 100;
+		const n2 = n1 % 10;
+		if (n1 > 10 && n1 < 20) return `${n} ${forms[2]}`;
+		if (n2 > 1 && n2 < 5) return `${n} ${forms[1]}`;
+		if (n2 === 1) return `${n} ${forms[0]}`;
+		return `${n} ${forms[2]}`;
+	},
 
-        // Обработчик удаления
-        div.querySelector('.delete-check').addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.deleteReceipt(receipt.id);
-        });
+	// ===== Рендер чеков по периодам =====
+	renderReceiptsByPeriods(periods) {
+		const checksGrid = document.querySelector('.checks-grid');
+		if (!checksGrid) return;
 
-        return div;
-    },
+		checksGrid.innerHTML = '';
+
+		if (!periods || periods.length === 0) {
+			checksGrid.innerHTML = '<p class="no-receipts">У вас пока нет загруженных чеков</p>';
+			return;
+		}
+
+		periods.forEach(period => {
+			// Создаём блок периода
+			const periodBlock = document.createElement('div');
+			periodBlock.className = `period-block ${period.is_passed ? 'period-passed' : 'period-active'}`;
+
+			// Заголовок периода
+			const periodHeader = document.createElement('div');
+			periodHeader.className = 'period-header';
+			periodHeader.innerHTML = `
+				<div class="period-info">
+					<span class="period-name">${period.drawing_name}</span>
+					<span class="period-date">${period.drawing_date_formatted}</span>
+				</div>
+				<div class="period-status ${period.is_passed ? 'status-passed' : 'status-upcoming'}">
+					${period.is_passed ? 'Розыгрыш прошёл' : 'Ожидается'}
+				</div>
+			`;
+
+			// Сетка чеков
+			const receiptsGrid = document.createElement('div');
+			receiptsGrid.className = 'period-receipts-grid';
+
+			period.receipts.forEach(receipt => {
+				receiptsGrid.appendChild(this.createReceiptItem(receipt, period.is_passed));
+			});
+
+			periodBlock.appendChild(periodHeader);
+			periodBlock.appendChild(receiptsGrid);
+			checksGrid.appendChild(periodBlock);
+		});
+	},
+
+	// ===== Создание элемента чека =====
+	createReceiptItem(receipt, isPassed) {
+		const div = document.createElement('div');
+		div.className = `check-item ${isPassed ? 'check-passed' : ''}`;
+		div.dataset.id = receipt.id;
+
+		let statusBadge = '';
+		if (isPassed) {
+			statusBadge = '<div class="check-badge passed">Розыгрыш прошёл</div>';
+		} else if (receipt.drawing_status && receipt.drawing_status.days_left !== undefined) {
+			if (receipt.drawing_status.days_left > 0) {
+				statusBadge = `<div class="check-badge active">Через ${this.pluralizeDays(receipt.drawing_status.days_left)}</div>`;
+			} else {
+				statusBadge = '<div class="check-badge today">Сегодня розыгрыш!</div>';
+			}
+		}
+
+		div.innerHTML = `
+			<img src="${receipt.image_url}" alt="Чек" class="check-image">
+			${statusBadge}
+			<div class="check-date">${receipt.created_at}</div>
+			<button class="delete-check" data-id="${receipt.id}">
+				<img src="assets/close-icon.png" alt="Удалить">
+			</button>
+		`;
+
+		return div;
+	},
 
     // ===== Удаление чека =====
     async deleteReceipt(id) {

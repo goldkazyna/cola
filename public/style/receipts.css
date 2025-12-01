@@ -113,3 +113,159 @@
     width: 20px;
     height: 20px;
 }
+
+/* ===== Информация о ближайшем розыгрыше ===== */
+.next-drawing-info {
+    text-align: center;
+    padding: 15px;
+    margin-top: 15px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.next-drawing-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 5px;
+}
+
+.next-drawing-name {
+    font-family: 'K_TCCCUnity', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.next-drawing-date {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.next-drawing-days {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #910101;
+    font-weight: 500;
+}
+
+/* ===== Блоки периодов ===== */
+.period-block {
+    margin-bottom: 25px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.period-header {
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.period-name {
+    font-family: 'K_TCCCUnity', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+}
+
+.period-date {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.period-status.status-passed {
+    background: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+	padding:5px;
+	border-radius:5px;
+	text-align:center;
+}
+
+/* ===== Сетка чеков в периоде ===== */
+.period-receipts-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 10px;
+    padding: 15px;
+}
+
+/* ===== Бейджи на чеках ===== */
+.check-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.check-badge.active {
+    background: #4CAF50;
+}
+
+.check-badge.today {
+    background: #FF9800;
+}
+
+.check-badge.passed {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Дата загрузки чека ===== */
+.check-date {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    font-family: 'Roboto', sans-serif;
+    font-size: 10px;
+    color: #fff;
+    text-align: center;
+}
+
+.check-item {
+    position: relative;
+    aspect-ratio: 1;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.check-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+/* ===== Прошедшие чеки ===== */
+.check-item.check-passed {
+    filter: grayscale(50%);
+}
+
+.check-item.check-passed::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}

@@ -62,41 +62,67 @@ class ReceiptController extends Controller
     }
 
     // Список чеков пользователя
-    public function index()
-    {
-        if (!Auth::check()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Необходима авторизация',
-            ], 401);
-        }
+	public function index()
+	{
+		if (!Auth::check()) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Необходима авторизация',
+			], 401);
+		}
 
-        $receipts = Receipt::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($receipt) {
-                return [
-                    'id' => $receipt->id,
-                    'image_url' => Storage::url($receipt->image_path),
-                    'status' => $receipt->status,
-                    'status_text' => $this->getStatusText($receipt->status),
-                    'reject_reason' => $receipt->reject_reason,
-                    'created_at' => $receipt->created_at->format('d.m.Y H:i'),
-                ];
-            });
+		$drawingService = new \App\Services\DrawingService();
 
-        // Считаем шансы (только одобренные чеки)
-        $chances = Receipt::where('user_id', Auth::id())
-            ->where('status', 'approved')
-            ->count();
+		$receipts = Receipt::where('user_id', Auth::id())
+			->orderBy('created_at', 'desc')
+			->get();
 
-        return response()->json([
-            'success' => true,
-            'receipts' => $receipts,
-            'chances' => $chances,
-            'total' => $receipts->count(),
-        ]);
-    }
+		// Группируем чеки по периодам
+		$grouped = $drawingService->groupReceiptsByPeriod($receipts);
+
+		// Форматируем для фронтенда
+		$periods = [];
+		foreach ($grouped as $drawingDate => $group) {
+			$periodReceipts = [];
+			foreach ($group['receipts'] as $receipt) {
+				$receiptStatus = $drawingService->getReceiptStatus($receipt->created_at);
+				$periodReceipts[] = [
+					'id' => $receipt->id,
+					'image_url' => Storage::url($receipt->image_path),
+					'status' => $receipt->status,
+					'status_text' => $this->getStatusText($receipt->status),
+					'reject_reason' => $receipt->reject_reason,
+					'created_at' => $receipt->created_at->format('d.m.Y H:i'),
+					'drawing_status' => $receiptStatus,
+				];
+			}
+
+			$periods[] = [
+				'drawing_name' => $group['period']['name'],
+				'drawing_date' => $group['period']['drawing_date'],
+				'drawing_date_formatted' => \Carbon\Carbon::parse($group['period']['drawing_date'])->format('d.m.Y'),
+				'is_passed' => $group['is_passed'],
+				'receipts' => $periodReceipts,
+				'count' => count($periodReceipts),
+			];
+		}
+
+		// Считаем шансы (только одобренные чеки)
+		$chances = Receipt::where('user_id', Auth::id())
+			->where('status', 'approved')
+			->count();
+
+		// Ближайший розыгрыш
+		$nextDrawing = $drawingService->getNextDrawing();
+
+		return response()->json([
+			'success' => true,
+			'periods' => $periods,
+			'chances' => $chances,
+			'total' => $receipts->count(),
+			'next_drawing' => $nextDrawing,
+		]);
+	}
 
     // Удаление чека
     public function delete($id)
