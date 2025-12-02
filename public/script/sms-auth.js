@@ -185,6 +185,9 @@ const SmsAuth = {
                     this.stopTimer();
                     this.openChecksWindow();
                     this.updateAuthUI(true);
+					if (typeof Receipts !== 'undefined') {
+						Receipts.loadUserReceipts();
+					}
                 } else {
                     this.showError('verification', result.message || 'Неверный код');
                     this.clearCodeInputs();

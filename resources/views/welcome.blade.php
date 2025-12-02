@@ -99,48 +99,14 @@
                 <div class="checks-content">
                     <!-- Количество шансов -->
                     <div class="chances-count">
-                        <p class="chances-number">99</p>
+                        <p class="chances-number">0</p>
                         <p class="chances-text">КОЛИЧЕСТВО ВАШИХ ШАНСОВ</p>
                     </div>
 
                     <!-- Сетка чеков -->
                     <div class="checks-grid">
-                        <!-- Чек 1 -->
-                        <div class="check-item">
-                            <img src="img/check.png" alt="Чек 1" class="check-image">
-                            <button class="delete-check">
-                                <img src="assets/close-icon.png" alt="Удалить">
-                            </button>
-                        </div>
-
-                        <!-- Чек 2 -->
-                        <div class="check-item">
-                            <img src="img/check.png" alt="Чек 2" class="check-image">
-                            <button class="delete-check">
-                                <img src="assets/close-icon.png" alt="Удалить">
-                            </button>
-                        </div>
-
-                        <!-- Чек 3 -->
-                        <div class="check-item">
-                            <img src="img/check.png" alt="Чек 3" class="check-image">
-                            <button class="delete-check">
-                                <img src="assets/close-icon.png" alt="Удалить">
-                            </button>
-                        </div>
-                        <div class="check-item">
-                            <img src="img/check.png" alt="Чек 3" class="check-image">
-                            <button class="delete-check">
-                                <img src="assets/close-icon.png" alt="Удалить">
-                            </button>
-                        </div>
-                        <div class="check-item">
-                            <img src="img/check.png" alt="Чек 3" class="check-image">
-                            <button class="delete-check">
-                                <img src="assets/close-icon.png" alt="Удалить">
-                            </button>
-                        </div>
-                    </div>
+						<!-- Чеки загружаются динамически -->
+					</div>
 
                     <div class="checks-info">
                         <div class="blockDown">
