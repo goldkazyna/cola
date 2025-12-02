@@ -73,7 +73,11 @@ class AuthController extends Controller
 
         // Находим или создаём пользователя
         $user = User::firstOrCreate(['phone' => $phone]);
-
+		
+		if ($user->wasRecentlyCreated) {
+			$telegram = new \App\Services\TelegramService();
+			$telegram->notifyNewUser($phone);
+		}	
         // Авторизуем с запоминанием на 30 дней
         Auth::login($user, true);
 
@@ -84,6 +88,7 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'phone' => $user->phone,
             ],
+			'csrf_token' => csrf_token(),
         ]);
     }
 

@@ -192,20 +192,35 @@ const Receipts = {
     },
 
     // ===== Загрузка чека на сервер =====
-    async uploadReceipt(file) {
-        const formData = new FormData();
-        formData.append('image', file);
+	async uploadReceipt(file) {
+		const formData = new FormData();
+		formData.append('image', file);
 
-        const response = await fetch('/receipts/upload', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': this.getCSRFToken(),
-            },
-            body: formData,
-        });
+		const csrfToken = this.getCSRFToken();
+		console.log('CSRF Token:', csrfToken); // Отладка
 
-        return response.json();
-    },
+		try {
+			const response = await fetch('/receipts/upload', {
+				method: 'POST',
+				headers: {
+					'X-CSRF-TOKEN': csrfToken,
+				},
+				body: formData,
+			});
+
+			console.log('Response status:', response.status); // Отладка
+
+			if (!response.ok) {
+				const text = await response.text();
+				console.log('Error response:', text); // Отладка
+			}
+
+			return response.json();
+		} catch (error) {
+			console.error('Upload error:', error); // Отладка
+			throw error;
+		}
+	},
 
 	// ===== Загрузка списка чеков пользователя =====
 	async loadUserReceipts() {

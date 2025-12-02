@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Services\TelegramService;
 
 class ReceiptController extends Controller
 {
@@ -47,8 +48,13 @@ class ReceiptController extends Controller
             'user_id' => Auth::id(),
             'image_path' => $path,
             'status' => 'approved',
+			'moderated_at' => now(),
         ]);
-
+		
+		$telegram = new TelegramService();
+		$imageUrl = url(Storage::url($path));
+		$telegram->notifyNewReceipt(Auth::user()->phone, $receipt->id, $imageUrl);
+		
         return response()->json([
             'success' => true,
             'message' => 'Чек загружен',

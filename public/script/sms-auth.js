@@ -180,6 +180,12 @@ const SmsAuth = {
                 const result = await this.verifyCode(this.currentPhone, code);
 
                 if (result.success) {
+					if (result.csrf_token) {
+						const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+						if (csrfMeta) {
+							csrfMeta.setAttribute('content', result.csrf_token);
+						}
+					}
                     // Успешно — открываем "Мои чеки"
                     this.clearCodeInputs();
                     this.stopTimer();
