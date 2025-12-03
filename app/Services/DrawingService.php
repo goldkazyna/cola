@@ -7,7 +7,7 @@ use Carbon\Carbon;
 class DrawingService
 {
 	// Тестовая дата (null = реальная дата)
-	private ?string $testDate = '2025-12-13'; // Для тестирования ставим 10 декабря
+	private ?string $testDate = null; // Реальная дата
 
 	// Получить текущую дату (реальную или тестовую)
 	private function now(): Carbon

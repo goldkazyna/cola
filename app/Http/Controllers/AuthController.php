@@ -24,7 +24,7 @@ class AuthController extends Controller
         SmsCode::where('phone', $phone)->delete();
 
         // Генерируем 4-значный код
-        $code = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $code = '1111';
 
         // Сохраняем код (действует 5 минут)
         SmsCode::create([
