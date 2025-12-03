@@ -10,7 +10,8 @@
 	<script src="{{ asset('script/sms-auth.js') }}"></script>
 	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}">
 	<script src="{{ asset('script/receipts.js') }}"></script>
-    <title>Document</title>
+    <title>Coca-Cola x Small — Новогодняя акция 2025</title>
+	<link rel="icon" type="image/png" href="{{ asset('assets/favicon.png') }}">
 </head>
 <body>
 
