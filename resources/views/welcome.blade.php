@@ -77,10 +77,10 @@
 					<p class="verification-error" id="verification-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
                     <form class="verification-form" id="verification-form">
                         <div class="code-inputs">
-                            <input type="text" maxlength="1" class="code-input" data-index="0">
-                            <input type="text" maxlength="1" class="code-input" data-index="1">
-                            <input type="text" maxlength="1" class="code-input" data-index="2">
-                            <input type="text" maxlength="1" class="code-input" data-index="3">
+                            <input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="0">
+							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="1">
+							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="2">
+							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="3">
                         </div>
                         <button type="submit" class="verification-submit">Войти</button>
                     </form>
