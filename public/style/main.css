@@ -75,7 +75,7 @@ time, mark, audio, video {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 0px 20px;
     position: fixed; /* Меняем на fixed */
     top: 0; /* Прижимаем к верху */
     left: 0; /* Прижимаем к левому краю */
