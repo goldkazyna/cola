@@ -35,10 +35,10 @@ class ReceiptController extends Controller
         $image = Image::read($file);
         
         // Уменьшаем если слишком большое (макс 1920px по большей стороне)
-        $image->scaleDown(1920, 1920);
+        $image->scaleDown(1280, 1280);
         
         // Кодируем в WebP с качеством 80%
-        $encoded = $image->toWebp(80);
+        $encoded = $image->toWebp(60);
         
         // Сохраняем
 		$fullPath = public_path('storage/' . $path);
