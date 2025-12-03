@@ -41,7 +41,15 @@ class ReceiptController extends Controller
         $encoded = $image->toWebp(80);
         
         // Сохраняем
-        Storage::disk('public')->put($path, $encoded);
+		$fullPath = public_path('storage/' . $path);
+
+		// Создаём папку если нет
+		$directory = dirname($fullPath);
+		if (!file_exists($directory)) {
+			mkdir($directory, 0755, true);
+		}
+
+		file_put_contents($fullPath, $encoded);
         
         // Создаём запись в БД
         $receipt = Receipt::create([
@@ -60,7 +68,7 @@ class ReceiptController extends Controller
             'message' => 'Чек загружен',
             'receipt' => [
                 'id' => $receipt->id,
-                'image_url' => Storage::url($path),
+                'image_url' => asset('storage/' . $path),
                 'status' => $receipt->status,
                 'created_at' => $receipt->created_at->format('d.m.Y H:i'),
             ],
@@ -94,7 +102,7 @@ class ReceiptController extends Controller
 				$receiptStatus = $drawingService->getReceiptStatus($receipt->created_at);
 				$periodReceipts[] = [
 					'id' => $receipt->id,
-					'image_url' => Storage::url($receipt->image_path),
+					'image_url' => asset('storage/' . $receipt->image_path),
 					'status' => $receipt->status,
 					'status_text' => $this->getStatusText($receipt->status),
 					'reject_reason' => $receipt->reject_reason,
@@ -152,7 +160,10 @@ class ReceiptController extends Controller
         }
 
         // Удаляем файл
-        Storage::disk('public')->delete($receipt->image_path);
+        $fullPath = public_path('storage/' . $receipt->image_path);
+		if (file_exists($fullPath)) {
+			unlink($fullPath);
+		}
         
         // Удаляем запись
         $receipt->delete();
