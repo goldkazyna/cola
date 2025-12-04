@@ -19,7 +19,7 @@
 <div class="main">
     <div class="header-container">
         <img src="assets/small.png" alt="small">
-        <img class="logo" src="assets/logo.png" alt="logo">
+        <img class="logo" src="assets/Frame 23.svg" alt="logo">
         <!-- Гамбургер меню -->
         <div class="hamburger-menu">
             <input type="checkbox" id="menu-toggle">
@@ -208,7 +208,7 @@
             <div class=" slider">
                 <div class=" slide">
                     <div class="card">
-                        <img class="" src="img/elka.png" alt="">
+                        <img class="" src="img/Frame 183.svg" alt="">
                     </div>
                 </div>
 
