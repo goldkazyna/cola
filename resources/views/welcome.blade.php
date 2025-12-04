@@ -156,7 +156,7 @@
 
             <div class="auth-upload-success">
                 <div class="auth-header">
-                    <img src='assets/gerlanda.svg' alt="gerlanda">
+                    <img src='assets/gerlanda.png' alt="gerlanda">
 					
                 </div>
                 <div class="upload-success-content">
@@ -172,8 +172,9 @@
 </div>
 <style>
 .auth-header img {
-	  image-rendering: -webkit-optimize-contrast;
-		image-rendering: crisp-edges;
+    width: 100%;
+    max-width: 400px; /* или сколько нужно */
+    height: auto;
 }
 </style>
 <div class="main">
