@@ -451,6 +451,34 @@
                     </div>
                 </div>
             </div>
+			
+			<div class="header-accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Победители 12.01.2026</span>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+
+                <div class="accordion-content">
+                    <div class="winners-table">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th data-lang="winners.date">Дата</th>
+                                <th data-lang="winners.prize">Приз</th>
+                                <th data-lang="winners.phone">Номер</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
