@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style/main.css?v=1.1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<script src="{{ asset('script/sms-auth.js') }}"></script>
+	<script src="{{ asset('script/sms-auth.js') }}?v=1.1"></script>
 	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}">
 	<script src="{{ asset('script/receipts.js') }}"></script>
     <title>Coca-Cola x Small — Новогодняя акция 2025</title>
