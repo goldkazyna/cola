@@ -10,6 +10,7 @@ use Carbon\Carbon;
 
 class AuthController extends Controller
 {
+
     // Отправка SMS-кода
     public function sendCode(Request $request)
     {
@@ -91,6 +92,47 @@ class AuthController extends Controller
 			'csrf_token' => csrf_token(),
         ]);
     }
+	
+		// ============================================
+		// ВРЕМЕННАЯ АВТОРИЗАЦИЯ (пока нет SMS доступов)
+		// ============================================
+
+		public function verifyPhone(Request $request)
+		{
+			$request->validate([
+				'phone' => 'required|string|min:10|max:20',
+				'phone_confirm' => 'required|string|min:10|max:20',
+			]);
+
+			$phone = preg_replace('/[^0-9+]/', '', $request->phone);
+			$phoneConfirm = preg_replace('/[^0-9+]/', '', $request->phone_confirm);
+
+			if ($phone !== $phoneConfirm) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Номера телефонов не совпадают',
+				], 422);
+			}
+
+			$user = User::firstOrCreate(['phone' => $phone]);
+			
+			if ($user->wasRecentlyCreated) {
+				$telegram = new \App\Services\TelegramService();
+				$telegram->notifyNewUser($phone);
+			}
+			
+			Auth::login($user, true);
+
+			return response()->json([
+				'success' => true,
+				'message' => 'Успешная авторизация',
+				'user' => [
+					'id' => $user->id,
+					'phone' => $user->phone,
+				],
+				'csrf_token' => csrf_token(),
+			]);
+		}	
 
     // Проверка статуса авторизации
     public function check()

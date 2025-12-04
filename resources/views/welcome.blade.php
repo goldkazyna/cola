@@ -46,7 +46,7 @@
             </nav>
 
             <!-- Окно авторизации -->
-            <div class="auth-window">
+            <!--<div class="auth-window">
                 <div class="auth-header">
                     <h2>АВТОРИЗАЦИЯ</h2>
                 </div>
@@ -65,8 +65,36 @@
                         </p>
                     </div>
                 </div>
-            </div>
-
+            </div>-->
+			<!-- Окно авторизации -->
+			<div class="auth-window">
+				<div class="auth-header">
+					<h2>АВТОРИЗАЦИЯ</h2>
+				</div>
+				<div class="auth-content">
+					<form class="auth-form" id="auth-form">
+						<p class="auth-formText">Укажите номер телефона</p>
+						
+						<p class="auth-error" id="auth-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
+						
+						<input type="tel" placeholder="+7 (000) 000-00-00" required id="phone-input" inputmode="numeric">
+						
+						<!-- Второе поле (скрыто по умолчанию) -->
+						<div id="phone-confirm-wrapper" style="display: none;">
+							<p class="auth-formText">Введите повторно номер телефона</p>
+							<input type="tel" placeholder="+7 (000) 000-00-00" id="phone-confirm-input" inputmode="numeric" style="width:100%; padding:15px 0px;">
+						</div>
+						
+						<button type="submit" class="auth-submit">ПРОДОЛЖИТЬ</button>
+					</form>
+					<div class="auth-links">
+						<p class="auth-links-text">
+							Введите номер телефона<br>
+							для авторизации
+						</p>
+					</div>
+				</div>
+			</div>
             <!-- Окно верификации -->
             <div class="auth-verification">
                 <div class="auth-header">

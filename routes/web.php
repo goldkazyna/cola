@@ -17,6 +17,7 @@ Route::post('/auth/send-code', [AuthController::class, 'sendCode']);
 Route::post('/auth/verify-code', [AuthController::class, 'verifyCode']);
 Route::get('/auth/check', [AuthController::class, 'check']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
+Route::post('/auth/verify-phone', [AuthController::class, 'verifyPhone']);
 
 // API для чеков
 Route::post('/receipts/upload', [ReceiptController::class, 'upload']);
