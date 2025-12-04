@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -10,12 +10,11 @@
 	<script src="{{ asset('script/sms-auth.js') }}?v=1.1"></script>
 	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}">
 	<script src="{{ asset('script/receipts.js') }}"></script>
+	<script src="{{ asset('script/lang.js') }}"></script>
     <title>Coca-Cola x Small — Новогодняя акция 2025</title>
 	<link rel="icon" type="image/png" href="{{ asset('assets/favicon.png') }}">
 </head>
 <body>
-
-
 
 <div class="main">
     <div class="header-container">
@@ -36,44 +35,23 @@
                 </span>
             </label>
             <nav class="menu-content">
-                <a href="#" class="auth-link">АВТОРИЗАЦИЯ</a>
-                <a href="#" class="checks-link">МОИ ЧЕКИ</a>
-                <a href="#" class="upload-link">ЗАГРУЗИТЬ ЧЕК</a>
+                <a href="#" class="auth-link" data-lang="menu.auth">АВТОРИЗАЦИЯ</a>
+                <a href="#" class="checks-link" data-lang="menu.checks">МОИ ЧЕКИ</a>
+                <a href="#" class="upload-link" data-lang="menu.upload">ЗАГРУЗИТЬ ЧЕК</a>
                 <div class="hamburgerUser">
-                    <p class="hamburgerUserText">КАЗАКША</p>
+                    <p class="hamburgerUserText" data-lang="menu.lang">ҚАЗАҚША</p>
                 </div>
                 <img class="lineHumberger" src="assets/lineTotalPrize.png" alt="line">
             </nav>
 
             <!-- Окно авторизации -->
-            <!--<div class="auth-window">
-                <div class="auth-header">
-                    <h2>АВТОРИЗАЦИЯ</h2>
-                </div>
-                <div class="auth-content">
-                    <form class="auth-form" id="auth-form">
-                        <p class="auth-formText">Укажите номер телефона</p>
-						
-						<p class="auth-error" id="auth-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
-                        <input type="tel" placeholder="+7 (000) 000-00-00" required id="phone-input">
-                        <button type="submit" class="auth-submit">ПОЛУЧИТЬ SMS КОД</button>
-                    </form>
-                    <div class="auth-links">
-                        <p class="auth-links-text">
-                            Мы отправим смс с кодом на <br>
-                            номер +7 (000) 000-00-00
-                        </p>
-                    </div>
-                </div>
-            </div>-->
-			<!-- Окно авторизации -->
 			<div class="auth-window">
 				<div class="auth-header">
-					<h2>АВТОРИЗАЦИЯ</h2>
+					<h2 data-lang="auth.title">АВТОРИЗАЦИЯ</h2>
 				</div>
 				<div class="auth-content">
 					<form class="auth-form" id="auth-form">
-						<p class="auth-formText">Укажите номер телефона</p>
+						<p class="auth-formText" data-lang="auth.subtitle">Укажите номер телефона</p>
 						
 						<p class="auth-error" id="auth-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
 						
@@ -81,27 +59,28 @@
 						
 						<!-- Второе поле (скрыто по умолчанию) -->
 						<div id="phone-confirm-wrapper" style="display: none;">
-							<p class="auth-formText">Введите повторно номер телефона</p>
+							<p class="auth-formText" data-lang="auth.confirm">Введите повторно номер телефона</p>
 							<input type="tel" placeholder="+7 (000) 000-00-00" id="phone-confirm-input" inputmode="numeric" style="width:100%; padding:15px 0px;">
 						</div>
 						
-						<button type="submit" class="auth-submit">ПРОДОЛЖИТЬ</button>
+						<button type="submit" class="auth-submit" data-lang="auth.button">ПРОДОЛЖИТЬ</button>
 					</form>
 					<div class="auth-links">
-						<p class="auth-links-text">
+						<p class="auth-links-text" data-lang="auth.hint">
 							Введите номер телефона<br>
 							для авторизации
 						</p>
 					</div>
 				</div>
 			</div>
+
             <!-- Окно верификации -->
             <div class="auth-verification">
                 <div class="auth-header">
-                    <h2>ВЕРИФИКАЦИЯ</h2>
+                    <h2 data-lang="verify.title">ВЕРИФИКАЦИЯ</h2>
                 </div>
                 <div class="verification-content">
-                    <p class="verification-text">Укажите Код из SMS</p>
+                    <p class="verification-text" data-lang="verify.subtitle">Укажите Код из SMS</p>
 					
 					<p class="verification-error" id="verification-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
                     <form class="verification-form" id="verification-form">
@@ -111,11 +90,11 @@
 							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="2">
 							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="3">
                         </div>
-                        <button type="submit" class="verification-submit">Войти</button>
+                        <button type="submit" class="verification-submit" data-lang="verify.button">Войти</button>
                     </form>
                     <div class="verification-links">
-                        <a class="no-code" href="">Не получили код?</a>
-                        <a href="#" class="resend-code" id="resend-code">Отправить код повторно</a>
+                        <a class="no-code" href="" data-lang="verify.nocode">Не получили код?</a>
+                        <a href="#" class="resend-code" id="resend-code" data-lang="verify.resend">Отправить код повторно</a>
                     </div>
                 </div>
             </div>
@@ -123,13 +102,13 @@
             <!-- Окно Мои чеки -->
             <div class="auth-checks">
                 <div class="auth-header">
-                    <h2>МОИ ЧЕКИ</h2>
+                    <h2 data-lang="checks.title">МОИ ЧЕКИ</h2>
                 </div>
                 <div class="checks-content">
                     <!-- Количество шансов -->
                     <div class="chances-count">
                         <p class="chances-number">0</p>
-                        <p class="chances-text">КОЛИЧЕСТВО ВАШИХ ШАНСОВ</p>
+                        <p class="chances-text" data-lang="checks.chances">КОЛИЧЕСТВО ВАШИХ ШАНСОВ</p>
                     </div>
 
                     <!-- Сетка чеков -->
@@ -139,7 +118,7 @@
 
                     <div class="checks-info">
                         <div class="blockDown">
-                                <a class="downChecks" href="">Загрузить чек <img src="assets/arrowWhiteR.png"> </a>
+                            <a class="downChecks" href=""><span data-lang="checks.upload">Загрузить чек</span> <img src="assets/arrowWhiteR.png"> </a>
                         </div>
                     </div>
                 </div>
@@ -147,7 +126,7 @@
 
             <div class="auth-checks-add">
                 <div class="auth-header">
-                    <h2>ЗАГРУЗИТЬ ЧЕК</h2>
+                    <h2 data-lang="upload.title">ЗАГРУЗИТЬ ЧЕК</h2>
                 </div>
                 <div class="checks-add-content">
                     <form class="upload-form" id="upload-form">
@@ -158,11 +137,11 @@
 							<div class="upload-buttons">
 								<button type="button" class="upload-option" id="gallery-btn">
 									<img src="assets/upload-icon.png" alt="Галерея">
-									<span>Галерея</span>
+									<span data-lang="upload.gallery">Галерея</span>
 								</button>
 								<button type="button" class="upload-option" id="camera-btn">
 									<img src="assets/upload-icon.png" alt="Камера">
-									<span>Камера</span>
+									<span data-lang="upload.camera">Камера</span>
 								</button>
 							</div>
 						</div>
@@ -170,7 +149,7 @@
                         <div class="uploaded-previews" id="uploaded-previews">
                         </div>
 
-                        <button type="submit" class="upload-submit" disabled>ОТПРАВИТЬ </button>
+                        <button type="submit" class="upload-submit" disabled data-lang="upload.submit">ОТПРАВИТЬ</button>
                     </form>
                 </div>
             </div>
@@ -183,8 +162,8 @@
                     <div class="success-icon">
                         <img src="assets/sucsess-icon.png" alt="Успех">
                     </div>
-                    <p class="success-title">Ваш чек <br> отправлен на проверку</p>
-                    <button class="success-button" id="success-button">УРА!</button>
+                    <p class="success-title" data-lang="success.title">Ваш чек <br> отправлен на проверку</p>
+                    <button class="success-button" id="success-button" data-lang="success.button">УРА!</button>
                 </div>
             </div>
         </div>
@@ -193,23 +172,20 @@
 
 <div class="main">
 
-
-
     <section class="mainBlock">
     <div class="main">
         <div class="mainContainer">
-            <h2 class="mainBlockText">СДЕЛАЙ НОВЫЙ ГОД</h2>
+            <h2 class="mainBlockText" data-lang="main.title1">СДЕЛАЙ НОВЫЙ ГОД</h2>
             <div class="mainBlockTextImg">
-                <h2 class="mainBlockText">ЯРЧЕ С </h2>
+                <h2 class="mainBlockText" data-lang="main.title2">ЯРЧЕ С </h2>
                 <img class="mainBlockImg" src="assets/cocacola.png" alt="small">
             </div>
         </div>
 
-
-        <p class="mainBlockTitel">Покупай продукцию Coca Cola и участвуй <br>
+        <p class="mainBlockTitel" data-lang="main.subtitle">Покупай продукцию Coca Cola и участвуй <br>
             в розыгрыше еженедельных и главного приза!</p>
 
-        <p class="mainBlockDescription">8 декабря 2025 — 11 января 2026</p>
+        <p class="mainBlockDescription" data-lang="main.dates">8 декабря 2025 — 11 января 2026</p>
 
         <img class="coloText" src="assets/coloText.png" alt="small">
         <div>
@@ -217,7 +193,7 @@
             <img src="assets/wolna.png" alt="" class="mainBlockImgWolna">
         </div>
         <div class="blockDown">
-            <a class="downCheck upload-link" href="">Загрузить чек <img src="assets/arrowRight.png"> </a>
+            <a class="downCheck upload-link" href=""><span data-lang="main.upload">Загрузить чек</span> <img src="assets/arrowRight.png"> </a>
         </div>
     </div>
 
@@ -226,7 +202,7 @@
 
 <section class="prize">
     <div class="main">
-        <h2 class="prizeMainText">ПРИЗЫ</h2>
+        <h2 class="prizeMainText" data-lang="prizes.title">ПРИЗЫ</h2>
 
         <div class="slider-container">
             <div class=" slider">
@@ -235,7 +211,6 @@
                         <img class="" src="img/elka.png" alt="">
                     </div>
                 </div>
-
 
                 <div class=" slide">
                     <div class="card">
@@ -270,7 +245,7 @@
                 <span class="indicator"></span>
             </div>
 
-            <h2 class="prizeUnderText">Призы могут отличаться от изображений</h2>
+            <h2 class="prizeUnderText" data-lang="prizes.note">Призы могут отличаться от изображений</h2>
         </div>
 
     </div>
@@ -279,7 +254,7 @@
 
 <section class="totalPrize">
 <div class="main">
-    <h2 class="totalPrizeTextt">ГЛАВНЫЙ ПРИЗ</h2>
+    <h2 class="totalPrizeTextt" data-lang="prizes.main">ГЛАВНЫЙ ПРИЗ</h2>
 
     <div class="blockPrize">
         <img class="blockPrizeImg" src="assets/greenShar.png" alt="small">
@@ -288,7 +263,7 @@
         <img class="blockPrizeImgColaRed" src="assets/sharCola.png" alt="small">
         <img class="greenSharColaPrize" src="assets/greenSharCola.png" alt="small">
         <div class="blocktotalPrize">
-            <p class="blocktotalPrizeText">
+            <p class="blocktotalPrizeText" data-lang="prizes.main.desc">
                 Три сертификата от тур оператора <br>
                 на незабываемое путешествие на двоих
             </p>
@@ -301,7 +276,7 @@
 
     <section class="participate">
     <div class="main">
-        <h2 class="participateText">Как участвовать?</h2>
+        <h2 class="participateText" data-lang="howto.title">Как участвовать?</h2>
 
         <div class="blockParticipate">
 
@@ -310,8 +285,8 @@
                     <img class="blockParticipateImgs" src="assets/bulet.png" alt="">
                 </div>
                 <div class="blockParticipateText">
-                    <h2 class="blockParticipateTextTitel">Купи 2 бутылки </h2>
-                    <p class="blockParticipateTextDescription">2 литра продукции Coca Cola в Small</p>
+                    <h2 class="blockParticipateTextTitel" data-lang="howto.step1.title">Купи 2 бутылки </h2>
+                    <p class="blockParticipateTextDescription" data-lang="howto.step1.desc">2 литра продукции Coca Cola в Small</p>
                 </div>
             </div>
 
@@ -320,7 +295,7 @@
                     <img class="blockParticipateImgs" src="assets/check.png" alt="">
                 </div>
                 <div class="blockParticipateText">
-                    <h2 class="blockParticipateTextTitel">Сфотографируй чек </h2>
+                    <h2 class="blockParticipateTextTitel" data-lang="howto.step2.title">Сфотографируй чек </h2>
                 </div>
             </div>
 
@@ -329,14 +304,14 @@
                     <img class="blockParticipateImgs" src="assets/gift.png" alt="">
                 </div>
                 <div class="blockParticipateText">
-                    <h2 class="blockParticipateTextTitel">Загрузи на сайт </h2>
-                    <p class="blockParticipateTextDescription">SMALL-COCACOLA.kz</p>
+                    <h2 class="blockParticipateTextTitel" data-lang="howto.step3.title">Загрузи на сайт </h2>
+                    <p class="blockParticipateTextDescription" data-lang="howto.step3.desc">SMALL-COCACOLA.kz</p>
                 </div>
             </div>
         </div>
 
         <div class="blockDown">
-            <a class="downCheck" href="">Загрузить чек <img src="assets/arrowRight.png"> </a>
+            <a class="downCheck" href=""><span data-lang="main.upload">Загрузить чек</span> <img src="assets/arrowRight.png"> </a>
         </div>
 
     </div>
@@ -347,15 +322,15 @@
 
     <section class="yslovia">
         <div class="main">
-            <h2 class="ysloviaText">Условия акции</h2>
-            <h2 class="ysloviaTextTitle">Участвующие товары</h2>
-            <p class="ysloviaTextDescription">Coca-Cola, Coca-Cola Zero Sugar, Fanta, Sprite (2L)</p>
+            <h2 class="ysloviaText" data-lang="terms.title">Условия акции</h2>
+            <h2 class="ysloviaTextTitle" data-lang="terms.products">Участвующие товары</h2>
+            <p class="ysloviaTextDescription" data-lang="terms.products.desc">Coca-Cola, Coca-Cola Zero Sugar, Fanta, Sprite (2L)</p>
 
-            <h2 class="ysloviaTextTitle">Минимальная покупка</h2>
-            <p class="ysloviaTextDescription">две бутылки объемом 2 литра любой комбинации</p>
+            <h2 class="ysloviaTextTitle" data-lang="terms.minimum">Минимальная покупка</h2>
+            <p class="ysloviaTextDescription" data-lang="terms.minimum.desc">две бутылки объемом 2 литра любой комбинации</p>
 
             <div class="blockDown">
-                <a class="checkPrav" href="">ПОЛНЫЕ ПРАВИЛА АКЦИИ <img src="assets/pdf.png" alt=""> </a>
+                <a class="checkPrav" href=""><span data-lang="terms.rules">ПОЛНЫЕ ПРАВИЛА АКЦИИ</span> <img src="assets/pdf.png" alt=""> </a>
             </div>
         </div>
         <img class="lineParticipate" src="assets/lineTotalPrize.png" alt="">
@@ -363,12 +338,11 @@
 
     <section class="winer">
         <div class="main">
-            <h2 class="winerText">ПОБЕДИТЕЛИ</h2>
-
+            <h2 class="winerText" data-lang="winners.title">ПОБЕДИТЕЛИ</h2>
 
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 20.20.2021</span>
+                    <span class="accordion-title">Победители 15.12.2025</span>
                     <span class="accordion-arrow">▼</span>
                 </div>
 
@@ -377,45 +351,26 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>Дата</th>
-                                <th>Приз</th>
-                                <th>Номер</th>
+                                <th data-lang="winners.date">Дата</th>
+                                <th data-lang="winners.prize">Приз</th>
+                                <th data-lang="winners.phone">Номер</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>20.10.2021</td>
-                                <td>iPhone 13</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>15.10.2021</td>
-                                <td>MacBook Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>10.10.2021</td>
-                                <td>AirPods Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>05.10.2021</td>
-                                <td>PlayStation 5</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>01.10.2021</td>
-                                <td>Apple Watch</td>
-                                <td>+7 XXX XXX-XX-XX</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 20.20.2025</span>
+                    <span class="accordion-title">Победители 22.12.2025</span>
                     <span class="accordion-arrow">▼</span>
                 </div>
 
@@ -424,45 +379,26 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>Дата</th>
-                                <th>Приз</th>
-                                <th>Номер</th>
+                                <th data-lang="winners.date">Дата</th>
+                                <th data-lang="winners.prize">Приз</th>
+                                <th data-lang="winners.phone">Номер</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>20.10.2021</td>
-                                <td>iPhone 13</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>15.10.2021</td>
-                                <td>MacBook Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>10.10.2021</td>
-                                <td>AirPods Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>05.10.2021</td>
-                                <td>PlayStation 5</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>01.10.2021</td>
-                                <td>Apple Watch</td>
-                                <td>+7 XXX XXX-XX-XX</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 20.20.2025</span>
+                    <span class="accordion-title">Победители 29.12.2025</span>
                     <span class="accordion-arrow">▼</span>
                 </div>
 
@@ -471,45 +407,26 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>Дата</th>
-                                <th>Приз</th>
-                                <th>Номер</th>
+                                <th data-lang="winners.date">Дата</th>
+                                <th data-lang="winners.prize">Приз</th>
+                                <th data-lang="winners.phone">Номер</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>20.10.2021</td>
-                                <td>iPhone 13</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>15.10.2021</td>
-                                <td>MacBook Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>10.10.2021</td>
-                                <td>AirPods Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>05.10.2021</td>
-                                <td>PlayStation 5</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>01.10.2021</td>
-                                <td>Apple Watch</td>
-                                <td>+7 XXX XXX-XX-XX</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 20.20.2025</span>
+                    <span class="accordion-title">Победители 05.01.2026</span>
                     <span class="accordion-arrow">▼</span>
                 </div>
 
@@ -518,36 +435,16 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>Дата</th>
-                                <th>Приз</th>
-                                <th>Номер</th>
+                                <th data-lang="winners.date">Дата</th>
+                                <th data-lang="winners.prize">Приз</th>
+                                <th data-lang="winners.phone">Номер</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>20.10.2021</td>
-                                <td>iPhone 13</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>15.10.2021</td>
-                                <td>MacBook Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>10.10.2021</td>
-                                <td>AirPods Pro</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>05.10.2021</td>
-                                <td>PlayStation 5</td>
-                                <td>+7 XXX XXX-XX-XX</td>
-                            </tr>
-                            <tr>
-                                <td>01.10.2021</td>
-                                <td>Apple Watch</td>
-                                <td>+7 XXX XXX-XX-XX</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
                             </tr>
                             </tbody>
                         </table>
@@ -562,7 +459,7 @@
         <div class="footer-content">
             <img class="footerLogo" src="assets/cocacola.png" alt="">
 
-            <a class="footerContentText" href="">Полные правила акции</a>
+            <a class="footerContentText" href="" data-lang="footer.rules">Полные правила акции</a>
 
             <p class="footerContentUnder">2025 - 2026 Сoca-Cola x Small</p>
         </div>
@@ -571,7 +468,6 @@
 
 </div>
 <script src="script/index.js"></script>
-
 
 </body>
 </html>

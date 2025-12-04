@@ -2,7 +2,16 @@
 
 const Receipts = {
     uploadedFiles: [],
-
+	translateDrawingName(name) {
+		const lang = (typeof Lang !== 'undefined') ? Lang.current : 'ru';
+		if (lang === 'kk') {
+			return name
+				.replace('Розыгрыш', 'Ұтыс')
+				.replace('декабря', 'желтоқсан')
+				.replace('января', 'қаңтар');
+		}
+		return name;
+	},
     init() {
         this.initUploadButtons();
         this.initUploadForm();
@@ -13,6 +22,11 @@ const Receipts = {
     // CSRF токен
     getCSRFToken() {
         return document.querySelector('meta[name="csrf-token"]')?.content;
+    },
+
+    // Получение перевода
+    getLang(key) {
+        return (typeof Lang !== 'undefined') ? Lang.get(key) : key;
     },
 
     // ===== Кнопки выбора (камера/галерея) =====
@@ -60,13 +74,13 @@ const Receipts = {
 
         // Проверка типа
         if (!file.type.startsWith('image/')) {
-            this.showError('Выберите изображение');
+            this.showError(this.getLang('receipt.error.image'));
             return;
         }
 
         // Проверка размера (10MB)
         if (file.size > 10 * 1024 * 1024) {
-            this.showError('Файл слишком большой. Максимум 10MB');
+            this.showError(this.getLang('receipt.error.size'));
             return;
         }
 
@@ -157,13 +171,13 @@ const Receipts = {
             e.preventDefault();
 
             if (this.uploadedFiles.length === 0) {
-                this.showError('Выберите фото чека');
+                this.showError(this.getLang('receipt.error.select'));
                 return;
             }
 
             const submitBtn = uploadForm.querySelector('.upload-submit');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'ЗАГРУЗКА...';
+            submitBtn.textContent = this.getLang('receipt.loading');
 
             try {
                 const result = await this.uploadReceipt(this.uploadedFiles[0]);
@@ -178,14 +192,14 @@ const Receipts = {
                     // Обновляем список чеков
                     this.loadUserReceipts();
                 } else {
-                    this.showError(result.message || 'Ошибка загрузки');
+                    this.showError(result.message || this.getLang('receipt.error.upload'));
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
-                this.showError('Ошибка соединения с сервером');
+                this.showError(this.getLang('receipt.error.connection'));
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'ОТПРАВИТЬ';
+                submitBtn.textContent = this.getLang('upload.submit');
                 this.updateSubmitButton();
             }
         });
@@ -266,19 +280,25 @@ const Receipts = {
 
 		if (infoBlock && nextDrawing) {
 			infoBlock.innerHTML = `
-				<p class="next-drawing-title">Ближайший розыгрыш:</p>
-				<p class="next-drawing-name">${nextDrawing.name}</p>
+				<p class="next-drawing-title">${this.getLang('receipt.next.title')}</p>
+				<p class="next-drawing-name">${this.translateDrawingName(nextDrawing.name)}</p>
 				<p class="next-drawing-date">${nextDrawing.date_formatted}</p>
-				${nextDrawing.days_left > 0 ? `<p class="next-drawing-days">Осталось ${this.pluralizeDays(nextDrawing.days_left)}</p>` : '<p class="next-drawing-days">Сегодня!</p>'}
+				${nextDrawing.days_left > 0 ? `<p class="next-drawing-days">${this.getLang('receipt.next.left')} ${this.pluralizeDays(nextDrawing.days_left)}</p>` : `<p class="next-drawing-days">${this.getLang('receipt.next.today')}</p>`}
 			`;
 		} else if (infoBlock) {
-			infoBlock.innerHTML = '<p class="next-drawing-title">Все розыгрыши завершены</p>';
+			infoBlock.innerHTML = `<p class="next-drawing-title">${this.getLang('receipt.next.finished')}</p>`;
 		}
 	},
 
 	// ===== Склонение дней =====
 	pluralizeDays(n) {
-		n = Math.ceil(n); // Округляем вверх
+		n = Math.ceil(n);
+		const lang = (typeof Lang !== 'undefined') ? Lang.current : 'ru';
+		
+		if (lang === 'kk') {
+			return `${n} күн`;
+		}
+		
 		const forms = ['день', 'дня', 'дней'];
 		const n1 = Math.abs(n) % 100;
 		const n2 = n1 % 10;
@@ -296,7 +316,7 @@ const Receipts = {
 		checksGrid.innerHTML = '';
 
 		if (!periods || periods.length === 0) {
-			checksGrid.innerHTML = '<p class="no-receipts">У вас пока нет загруженных чеков</p>';
+			checksGrid.innerHTML = `<p class="no-receipts">${this.getLang('receipt.empty')}</p>`;
 			return;
 		}
 
@@ -310,11 +330,11 @@ const Receipts = {
 			periodHeader.className = 'period-header';
 			periodHeader.innerHTML = `
 				<div class="period-info">
-					<span class="period-name">${period.drawing_name}</span>
+					<span class="period-name">${this.translateDrawingName(period.drawing_name)}</span>
 					<span class="period-date">${period.drawing_date_formatted}</span>
 				</div>
 				<div class="period-status ${period.is_passed ? 'status-passed' : 'status-upcoming'}">
-					${period.is_passed ? 'Розыгрыш прошёл' : 'Ожидается'}
+					${period.is_passed ? this.getLang('receipt.status.passed') : this.getLang('receipt.status.upcoming')}
 				</div>
 			`;
 
@@ -340,12 +360,12 @@ const Receipts = {
 
 		let statusBadge = '';
 		if (isPassed) {
-			statusBadge = '<div class="check-badge passed">Розыгрыш прошёл</div>';
+			statusBadge = `<div class="check-badge passed">${this.getLang('receipt.status.passed')}</div>`;
 		} else if (receipt.drawing_status && receipt.drawing_status.days_left !== undefined) {
 			if (receipt.drawing_status.days_left > 0) {
-				statusBadge = `<div class="check-badge active">Через ${this.pluralizeDays(receipt.drawing_status.days_left)}</div>`;
+				statusBadge = `<div class="check-badge active">${this.getLang('receipt.in')} ${this.pluralizeDays(receipt.drawing_status.days_left)}</div>`;
 			} else {
-				statusBadge = '<div class="check-badge today">Сегодня розыгрыш!</div>';
+				statusBadge = `<div class="check-badge today">${this.getLang('receipt.today')}</div>`;
 			}
 		}
 
@@ -363,7 +383,7 @@ const Receipts = {
 
     // ===== Удаление чека =====
     async deleteReceipt(id) {
-        if (!confirm('Удалить этот чек?')) return;
+        if (!confirm(this.getLang('receipt.confirm.delete'))) return;
 
         try {
             const response = await fetch(`/receipts/${id}`, {
@@ -383,11 +403,11 @@ const Receipts = {
                 // Обновляем список
                 this.loadUserReceipts();
             } else {
-                this.showError(result.message || 'Ошибка удаления');
+                this.showError(result.message || this.getLang('receipt.error.delete'));
             }
         } catch (error) {
             console.error('Ошибка:', error);
-            this.showError('Ошибка соединения');
+            this.showError(this.getLang('receipt.error.connection'));
         }
     },
 
