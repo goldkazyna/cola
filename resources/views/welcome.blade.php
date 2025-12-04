@@ -215,13 +215,13 @@
             <div class=" slider">
                 <div class=" slide">
                     <div class="card">
-                        <img class="" src="img/elka1.svg" alt="">
+                        <img class="" src="img/elka.png" alt="">
                     </div>
                 </div>
 
                 <div class=" slide">
                     <div class="card">
-                        <img class="" src="img/tarelka1.svg" alt="">
+                        <img class="" src="img/tarelka.png" alt="">
                     </div>
                 </div>
 
