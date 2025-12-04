@@ -156,7 +156,7 @@
 
             <div class="auth-upload-success">
                 <div class="auth-header">
-                    <img src='assets/gerlanda.png' alt="gerlanda">
+                    <img src='assets/gerlanda1.png' alt="gerlanda">
 					
                 </div>
                 <div class="upload-success-content">
@@ -221,7 +221,7 @@
 
                 <div class=" slide">
                     <div class="card">
-                        <img class="" src="img/tarelka.png" alt="">
+                        <img class="" src="img/tarelka.svg" alt="">
                     </div>
                 </div>
 
