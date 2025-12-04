@@ -213,35 +213,33 @@
 
         <div class="slider-container">
             <div class=" slider">
-                <div class=" slide">
+               <div class=" slide">
                     <div class="card">
-                        <img class="" src="img/elka.png" alt="">
+                        <img class="" src="img/1/el.svg" alt="">
                     </div>
                 </div>
-
-                <div class=" slide">
+				<div class=" slide">
                     <div class="card">
-                        <img class="" src="img/tarelka.png" alt="">
+                        <img class="" src="img/1/ta.svg" alt="">
                     </div>
                 </div>
-
-                <div class=" slide">
+				<div class=" slide">
                     <div class="card">
-                       <img src="img/zapas.png" alt="" class="">
+                        <img class="" src="img/1/co.svg" alt="">
                     </div>
                 </div>
-
-                <div class=" slide">
+				<div class=" slide">
                     <div class="card">
-                        <img class="" src="img/sertifikat.png" alt="">
+                        <img class="" src="img/1/se.svg" alt="">
                     </div>
                 </div>
-
-                <div class=" slide">
+				<div class=" slide">
                     <div class="card">
-                        <img class="" src="img/kamera.png" alt="">
+                        <img class="" src="img/1/ph.svg" alt="">
                     </div>
                 </div>
+				
+                
             </div>
 
             <div class="slider-indicators">
