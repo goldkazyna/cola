@@ -156,7 +156,7 @@
 
             <div class="auth-upload-success">
                 <div class="auth-header">
-                    <img src='assets/gerlanda.png' alt="gerlanda">
+                    <img src='assets/gerlanda.svg' alt="gerlanda">
                 </div>
                 <div class="upload-success-content">
                     <div class="success-icon">
