@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style/main.css?v=1.2">
+    <link rel="stylesheet" href="style/main.css?v=1.3">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<script src="{{ asset('script/sms-auth.js') }}?v=1.1"></script>
 	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}?v=1.1">
@@ -156,7 +156,7 @@
 
             <div class="auth-upload-success">
                 <div class="auth-header">
-                    <img src='assets/gerlanda.svg' alt="gerlanda">
+                    <img src='assets/gerlanda.jpg' alt="gerlanda" style="width:100%;">
                 </div>
                 <div class="upload-success-content">
                     <div class="success-icon">
