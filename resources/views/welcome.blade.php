@@ -215,12 +215,12 @@
             <div class=" slider">
                <div class=" slide">
                     <div class="card">
-                        <img class="" src="img/1/el.svg" alt="">
+                        <img class="" src="img/1/el2.svg" alt="">
                     </div>
                 </div>
 				<div class=" slide">
                     <div class="card">
-                        <img class="" src="img/1/ta.svg" alt="">
+                        <img class="" src="img/1/ta2.svg" alt="">
                     </div>
                 </div>
 				<div class=" slide">
@@ -235,7 +235,7 @@
                 </div>
 				<div class=" slide">
                     <div class="card">
-                        <img class="" src="img/1/ph.svg" alt="">
+                        <img class="" src="img/1/ph2.svg" alt="">
                     </div>
                 </div>
 				
