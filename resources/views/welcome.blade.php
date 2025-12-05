@@ -225,7 +225,7 @@
                 </div>
 				<div class=" slide">
                     <div class="card">
-                        <img class="" src="img/1/co.svg" alt="">
+                        <img class="" src="img/1/co2.svg" alt="">
                     </div>
                 </div>
 				<div class=" slide">
@@ -264,7 +264,7 @@
     <div class="blockPrize">
         <img class="blockPrizeImg" src="assets/greenShar.png" alt="small">
         <img class="redShar" src="assets/redShar.png" alt="small">
-        <img class="mainBlockImgTotal" src="img/totalPrize.png" alt="small">
+        <img class="mainBlockImgTotal" src="img/1/tt2.png" alt="small">
         <img class="blockPrizeImgColaRed" src="assets/sharCola.png" alt="small">
         <img class="greenSharColaPrize" src="assets/greenSharCola.png" alt="small">
         <div class="blocktotalPrize">
@@ -459,7 +459,7 @@
 			
 			<div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 12.01.2026</span>
+                    <span class="accordion-title">Победители 16.01.2026</span>
                     <span class="accordion-arrow">▼</span>
                 </div>
 
