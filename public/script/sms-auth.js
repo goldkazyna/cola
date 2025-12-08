@@ -8,12 +8,13 @@ const SmsAuth = {
         this.initAuthForm();
         this.initUploadButtons();
         this.checkAuthStatus();
+		this.initAgreeCheckbox();
     },
-
+	
     getCSRFToken() {
         return document.querySelector('meta[name="csrf-token"]')?.content;
     },
-
+	
     // ===== Маска телефона =====
     applyPhoneMask(input) {
         input.addEventListener('input', (e) => {
@@ -168,7 +169,16 @@ const SmsAuth = {
             });
         });
     },
-
+	initAgreeCheckbox() {
+		const checkbox = document.getElementById('agree-rules');
+		const submitBtn = document.getElementById('auth-submit');
+		
+		if (!checkbox || !submitBtn) return;
+		
+		checkbox.addEventListener('change', () => {
+			submitBtn.disabled = !checkbox.checked;
+		});
+	},
     // ===== API =====
     async verifyPhone(phone, phoneConfirm) {
         const response = await fetch('/auth/verify-phone', {

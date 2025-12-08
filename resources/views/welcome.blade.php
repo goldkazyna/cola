@@ -5,12 +5,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style/main.css?v=1.3">
+    <link rel="stylesheet" href="style/main.css?v={{ filemtime(public_path('style/receipts.css')) }}">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<script src="{{ asset('script/sms-auth.js') }}?v=1.1"></script>
-	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}?v=1.1">
-	<script src="{{ asset('script/receipts.js') }}?v=1.1"></script>
-	<script src="{{ asset('script/lang.js') }}?v=1.2"></script>
+	<script src="{{ asset('script/sms-auth.js') }}?v={{ filemtime(public_path('style/receipts.css')) }}"></script>
+	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}?v={{ filemtime(public_path('style/receipts.css')) }}">
+	<script src="{{ asset('script/receipts.js') }}?v={{ filemtime(public_path('style/receipts.css')) }}"></script>
+	<script src="{{ asset('script/lang.js') }}?v={{ filemtime(public_path('style/receipts.css')) }}"></script>
     <title>Coca-Cola x Small — Новогодняя акция 2025</title>
 	<link rel="icon" type="image/png" href="{{ asset('assets/favicon.png') }}">
 </head>
@@ -63,7 +63,13 @@
 							<input type="tel" placeholder="+7 (000) 000-00-00" id="phone-confirm-input" inputmode="numeric" style="width:100%; padding:15px 0px;">
 						</div>
 						
-						<button type="submit" class="auth-submit" data-lang="auth.button">ПРОДОЛЖИТЬ</button>
+						<!-- Добавь только это: -->
+						<label class="agree-checkbox">
+							<input type="checkbox" id="agree-rules" required checked >
+							<span>Я согласен с <a href="upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf" target="_blank">правилами акции</a></span>
+						</label>
+						
+						<button type="submit" class="auth-submit" id="auth-submit" data-lang="auth.button">ПРОДОЛЖИТЬ</button>
 					</form>
 					<div class="auth-links">
 						<p class="auth-links-text" data-lang="auth.hint">
@@ -335,7 +341,7 @@
             <p class="ysloviaTextDescription" data-lang="terms.minimum.desc">две бутылки объемом 2 литра любой комбинации</p>
 
             <div class="blockDown">
-                <a class="checkPrav" href=""><span data-lang="terms.rules">ПОЛНЫЕ ПРАВИЛА АКЦИИ</span> <img src="assets/pdf.png" alt=""> </a>
+                <a class="checkPrav" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf"><span data-lang="terms.rules">ПОЛНЫЕ ПРАВИЛА АКЦИИ</span> <img src="assets/pdf.png" alt=""> </a>
             </div>
         </div>
         <img class="lineParticipate" src="assets/lineTotalPrize.png" alt="">
@@ -492,7 +498,7 @@
         <div class="footer-content">
             <img class="footerLogo" src="assets/cocacola.png" alt="">
 
-            <a class="footerContentText" href="" data-lang="footer.rules">Полные правила акции</a>
+            <a class="footerContentText" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf" data-lang="footer.rules">Полные правила акции</a>
 
             <p class="footerContentUnder">2025 - 2026 Сoca-Cola x Small</p>
         </div>
@@ -501,6 +507,44 @@
 
 </div>
 <script src="script/index.js"></script>
+<style>
+/* Чекбокс согласия с правилами */
+.agree-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #333;
+}
 
+.agree-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: #910101;
+}
+
+.agree-checkbox span {
+    line-height: 1.4;
+}
+
+.agree-checkbox a {
+    color: #910101;
+    text-decoration: underline;
+}
+
+.agree-checkbox a:hover {
+    color: #b10202;
+}
+
+/* Неактивная кнопка */
+.auth-submit:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+</style>
 </body>
 </html>
