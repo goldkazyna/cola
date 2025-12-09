@@ -35,17 +35,17 @@ const translations = {
         // Как участвовать
         'howto.title': 'Как участвовать?',
         'howto.step1.title': 'Купи 2 бутылки',
-        'howto.step1.desc': '2 литра продукции Coca Cola в Small',
+        'howto.step1.desc': 'по 2 литра продукции Coca Cola в Small',
         'howto.step2.title': 'Сфотографируй чек',
         'howto.step3.title': 'Загрузи на сайт',
-        'howto.step3.desc': 'SMALL-COCACOLA.kz',
+        'howto.step3.desc': 'COCACOLA-SMALL.KZ',
         
         // Условия
         'terms.title': 'Условия акции',
         'terms.products': 'Участвующие товары',
         'terms.products.desc': 'Coca-Cola, Coca-Cola Zero Sugar, Fanta, Sprite (2L)',
         'terms.minimum': 'Минимальная покупка',
-        'terms.minimum.desc': 'две бутылки объемом 2 литра любой комбинации',
+        'terms.minimum.desc': 'две любые бутылки объемом по 2 литра любой комбинации',
         'terms.rules': 'ПОЛНЫЕ ПРАВИЛА АКЦИИ',
         
         // Победители

@@ -297,7 +297,7 @@
                 </div>
                 <div class="blockParticipateText">
                     <h2 class="blockParticipateTextTitel" data-lang="howto.step1.title">Купи 2 бутылки </h2>
-                    <p class="blockParticipateTextDescription" data-lang="howto.step1.desc">2 литра продукции Coca Cola в Small</p>
+                    <p class="blockParticipateTextDescription" data-lang="howto.step1.desc">по 2 литра продукции Coca Cola в Small</p>
                 </div>
             </div>
 
@@ -316,7 +316,7 @@
                 </div>
                 <div class="blockParticipateText">
                     <h2 class="blockParticipateTextTitel" data-lang="howto.step3.title">Загрузи на сайт </h2>
-                    <p class="blockParticipateTextDescription" data-lang="howto.step3.desc">SMALL-COCACOLA.kz</p>
+                    <p class="blockParticipateTextDescription" data-lang="howto.step3.desc">COCACOLA-SMALL.KZ</p>
                 </div>
             </div>
         </div>
@@ -338,7 +338,7 @@
             <p class="ysloviaTextDescription" data-lang="terms.products.desc">Coca-Cola, Coca-Cola Zero Sugar, Fanta, Sprite (2L)</p>
 
             <h2 class="ysloviaTextTitle" data-lang="terms.minimum">Минимальная покупка</h2>
-            <p class="ysloviaTextDescription" data-lang="terms.minimum.desc">две бутылки объемом 2 литра любой комбинации</p>
+            <p class="ysloviaTextDescription" data-lang="terms.minimum.desc">две любые бутылки объемом по 2 литра любой комбинации</p>
 
             <div class="blockDown">
                 <a class="checkPrav" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf"><span data-lang="terms.rules">ПОЛНЫЕ ПРАВИЛА АКЦИИ</span> <img src="assets/pdf.png" alt=""> </a>
