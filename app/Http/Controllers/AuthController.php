@@ -102,6 +102,8 @@ class AuthController extends Controller
 			$request->validate([
 				'phone' => 'required|string|min:10|max:20',
 				'phone_confirm' => 'required|string|min:10|max:20',
+				'name' => 'required|string|min:2|max:100',
+				'city' => 'required|string|min:2|max:100',
 			]);
 
 			$phone = preg_replace('/[^0-9+]/', '', $request->phone);
@@ -114,7 +116,19 @@ class AuthController extends Controller
 				], 422);
 			}
 
-			$user = User::firstOrCreate(['phone' => $phone]);
+			// Создаём или находим юзера
+			$user = User::firstOrCreate(
+				['phone' => $phone],
+				['name' => $request->name, 'city' => $request->city]
+			);
+			
+			// Если юзер уже был — обновляем имя и город
+			if (!$user->wasRecentlyCreated) {
+				$user->update([
+					'name' => $request->name,
+					'city' => $request->city,
+				]);
+			}
 			
 			if ($user->wasRecentlyCreated) {
 				$telegram = new \App\Services\TelegramService();
@@ -129,10 +143,12 @@ class AuthController extends Controller
 				'user' => [
 					'id' => $user->id,
 					'phone' => $user->phone,
+					'name' => $user->name,
+					'city' => $user->city,
 				],
 				'csrf_token' => csrf_token(),
 			]);
-		}	
+		}
 
     // Проверка статуса авторизации
     public function check()

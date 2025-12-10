@@ -61,98 +61,118 @@ const SmsAuth = {
 
     // ===== Форма авторизации =====
     initAuthForm() {
-        const authForm = document.getElementById('auth-form');
-        if (!authForm) return;
+		const authForm = document.getElementById('auth-form');
+		if (!authForm) return;
 
-        const phoneInput = document.getElementById('phone-input');
-        const confirmWrapper = document.getElementById('phone-confirm-wrapper');
-        const confirmInput = document.getElementById('phone-confirm-input');
-        const submitBtn = authForm.querySelector('.auth-submit');
-        const authLinksText = document.querySelector('.auth-links-text');
+		const phoneInput = document.getElementById('phone-input');
+		const nameInput = document.getElementById('name-input');
+		const cityInput = document.getElementById('city-input');
+		const confirmWrapper = document.getElementById('phone-confirm-wrapper');
+		const confirmInput = document.getElementById('phone-confirm-input');
+		const submitBtn = authForm.querySelector('.auth-submit');
+		const authLinksText = document.querySelector('.auth-links-text');
 
-        if (confirmInput) {
-            this.applyPhoneMask(confirmInput);
-        }
+		if (confirmInput) {
+			this.applyPhoneMask(confirmInput);
+		}
 
-        // Показываем второе поле когда первый номер полный
-        phoneInput.addEventListener('input', () => {
-            const phone = phoneInput.value.trim();
-            
-            if (phone.length >= 16) {
-                confirmWrapper.style.display = 'block';
-                confirmInput.value = '+7 ';
-                confirmInput.focus();
-                submitBtn.textContent = 'ВОЙТИ';
-                if (authLinksText) {
-                    authLinksText.innerHTML = 'Повторите номер телефона<br>для подтверждения';
-                }
-            } else {
-                confirmWrapper.style.display = 'none';
-                submitBtn.textContent = 'ПРОДОЛЖИТЬ';
-                if (authLinksText) {
-                    authLinksText.innerHTML = 'Введите номер телефона<br>для авторизации';
-                }
-            }
-        });
+		// Показываем второе поле когда первый номер полный
+		phoneInput.addEventListener('input', () => {
+			const phone = phoneInput.value.trim();
+			const name = nameInput ? nameInput.value.trim() : '';
+			const city = cityInput ? cityInput.value.trim() : '';
+			
+			// Показываем подтверждение только когда всё заполнено
+			if (phone.length >= 16 && name.length >= 2 && city.length >= 2) {
+				confirmWrapper.style.display = 'block';
+				confirmInput.value = '+7 ';
+				confirmInput.focus();
+				submitBtn.textContent = 'ВОЙТИ';
+				if (authLinksText) {
+					authLinksText.innerHTML = 'Повторите номер телефона<br>для подтверждения';
+				}
+			} else {
+				confirmWrapper.style.display = 'none';
+				submitBtn.textContent = 'ПРОДОЛЖИТЬ';
+				if (authLinksText) {
+					authLinksText.innerHTML = 'Введите номер телефона<br>для авторизации';
+				}
+			}
+		});
 
-        // Отправка формы
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const phone = phoneInput.value.trim();
-            const phoneConfirm = confirmInput ? confirmInput.value.trim() : '';
+		// Отправка формы
+		authForm.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			
+			const name = nameInput ? nameInput.value.trim() : '';
+			const city = cityInput ? cityInput.value.trim() : '';
+			const phone = phoneInput.value.trim();
+			const phoneConfirm = confirmInput ? confirmInput.value.trim() : '';
 
-            if (phone.length < 16) {
-                this.showError('Введите полный номер телефона');
-                return;
-            }
+			// Проверки
+			if (name.length < 2) {
+				this.showError('auth', 'Введите имя');
+				return;
+			}
+			
+			if (city.length < 2) {
+				this.showError('auth', 'Введите город');
+				return;
+			}
 
-            if (phoneConfirm.length < 16) {
-                this.showError('Повторите номер телефона');
-                if (confirmInput) confirmInput.focus();
-                return;
-            }
+			if (phone.length < 16) {
+				this.showError('auth', 'Введите полный номер телефона');
+				return;
+			}
 
-            this.hideError();
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'ПРОВЕРКА...';
+			if (phoneConfirm.length < 16) {
+				this.showError('auth', 'Повторите номер телефона');
+				if (confirmInput) confirmInput.focus();
+				return;
+			}
 
-            try {
-                const result = await this.verifyPhone(phone, phoneConfirm);
+			this.hideError('auth');
+			submitBtn.disabled = true;
+			submitBtn.textContent = 'ПРОВЕРКА...';
 
-                if (result.success) {
-                    if (result.csrf_token) {
-                        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
-                        if (csrfMeta) csrfMeta.setAttribute('content', result.csrf_token);
-                    }
-                    
-                    this.openChecksWindow();
-                    this.updateAuthUI(true);
-                    
-                    // Сброс формы
-                    phoneInput.value = '+7 ';
-                    if (confirmInput) confirmInput.value = '';
-                    if (confirmWrapper) confirmWrapper.style.display = 'none';
-                    
-                    if (typeof Receipts !== 'undefined') {
-                        Receipts.loadUserReceipts();
-                    }
-                } else {
-                    this.showError(result.message || 'Ошибка авторизации');
-                    if (confirmInput) {
-                        confirmInput.value = '+7 ';
-                        confirmInput.focus();
-                    }
-                }
-            } catch (error) {
-                console.error('Ошибка:', error);
-                this.showError('Ошибка соединения с сервером');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'ВОЙТИ';
-            }
-        });
-    },
+			try {
+				const result = await this.verifyPhone(phone, phoneConfirm, name, city);
+
+				if (result.success) {
+					if (result.csrf_token) {
+						const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+						if (csrfMeta) csrfMeta.setAttribute('content', result.csrf_token);
+					}
+					
+					this.openChecksWindow();
+					this.updateAuthUI(true);
+					
+					// Сброс формы
+					if (nameInput) nameInput.value = '';
+					if (cityInput) cityInput.value = '';
+					phoneInput.value = '+7 ';
+					if (confirmInput) confirmInput.value = '';
+					if (confirmWrapper) confirmWrapper.style.display = 'none';
+					
+					if (typeof Receipts !== 'undefined') {
+						Receipts.loadUserReceipts();
+					}
+				} else {
+					this.showError('auth', result.message || 'Ошибка авторизации');
+					if (confirmInput) {
+						confirmInput.value = '+7 ';
+						confirmInput.focus();
+					}
+				}
+			} catch (error) {
+				console.error('Ошибка:', error);
+				this.showError('auth', 'Ошибка соединения с сервером');
+			} finally {
+				submitBtn.disabled = false;
+				submitBtn.textContent = 'ВОЙТИ';
+			}
+		});
+	},
 
     // ===== Кнопки "Загрузить чек" =====
     initUploadButtons() {
@@ -180,17 +200,17 @@ const SmsAuth = {
 		});
 	},
     // ===== API =====
-    async verifyPhone(phone, phoneConfirm) {
-        const response = await fetch('/auth/verify-phone', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': this.getCSRFToken(),
-            },
-            body: JSON.stringify({ phone, phone_confirm: phoneConfirm }),
-        });
-        return response.json();
-    },
+    async verifyPhone(phone, phoneConfirm, name, city) {
+		const response = await fetch('/auth/verify-phone', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': this.getCSRFToken(),
+			},
+			body: JSON.stringify({ phone, phone_confirm: phoneConfirm, name, city }),
+		});
+		return response.json();
+	},
 
     async checkAuthStatus() {
         try {

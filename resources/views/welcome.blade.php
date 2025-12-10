@@ -51,9 +51,13 @@
 				</div>
 				<div class="auth-content">
 					<form class="auth-form" id="auth-form">
-						<p class="auth-formText" data-lang="auth.subtitle">Укажите номер телефона</p>
+						<p class="auth-formText" data-lang="auth.subtitle">Укажите данные</p>
 						
 						<p class="auth-error" id="auth-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
+						
+						<input type="text" placeholder="Ваше имя" required id="name-input">
+						
+						<input type="text" placeholder="Город" required id="city-input">
 						
 						<input type="tel" placeholder="+7 (000) 000-00-00" required id="phone-input" inputmode="numeric">
 						
@@ -63,9 +67,8 @@
 							<input type="tel" placeholder="+7 (000) 000-00-00" id="phone-confirm-input" inputmode="numeric" style="width:100%; padding:15px 0px;">
 						</div>
 						
-						<!-- Добавь только это: -->
 						<label class="agree-checkbox">
-							<input type="checkbox" id="agree-rules" required checked >
+							<input type="checkbox" id="agree-rules" required checked>
 							<span>Я согласен с <a href="upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf" target="_blank">правилами акции</a></span>
 						</label>
 						
