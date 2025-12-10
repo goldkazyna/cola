@@ -344,7 +344,7 @@
             <p class="ysloviaTextDescription" data-lang="terms.minimum.desc">две любые бутылки объемом по 2 литра любой комбинации</p>
 
             <div class="blockDown">
-                <a class="checkPrav" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf"><span data-lang="terms.rules">ПОЛНЫЕ ПРАВИЛА АКЦИИ</span> <img src="assets/pdf.png" alt=""> </a>
+                <a class="checkPrav" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola рус + каз.pdf"><span data-lang="terms.rules">ПОЛНЫЕ ПРАВИЛА АКЦИИ</span> <img src="assets/pdf.png" alt=""> </a>
             </div>
         </div>
         <img class="lineParticipate" src="assets/lineTotalPrize.png" alt="">
