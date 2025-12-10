@@ -69,7 +69,7 @@
 						
 						<label class="agree-checkbox">
 							<input type="checkbox" id="agree-rules" required checked>
-							<span>Я согласен с <a href="upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf" target="_blank">правилами акции</a></span>
+							<span>Я согласен с <a href="upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola рус + каз.pdf" target="_blank">правилами акции</a></span>
 						</label>
 						
 						<button type="submit" class="auth-submit" id="auth-submit" data-lang="auth.button">ПРОДОЛЖИТЬ</button>
@@ -501,7 +501,7 @@
         <div class="footer-content">
             <img class="footerLogo" src="assets/cocacola.png" alt="">
 
-            <a class="footerContentText" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf" data-lang="footer.rules">Полные правила акции</a>
+            <a class="footerContentText" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola рус + каз.pdf" data-lang="footer.rules">Полные правила акции</a>
 
             <p class="footerContentUnder">2025 - 2026 Сoca-Cola x Small</p>
         </div>
