@@ -204,7 +204,7 @@
         <p class="mainBlockDescription" data-lang="main.dates">8 декабря 2025 — 11 января 2026</p>
 
         <img class="coloText" src="assets/coloText.png" alt="small">
-        <div>
+        <div class="santa">
             <img class="mainBlockImgTwo" src="img/santa.png" alt="small">
             <img src="assets/wolna.png" alt="" class="mainBlockImgWolna">
         </div>
@@ -547,6 +547,31 @@
 .auth-submit:disabled {
     background: #ccc;
     cursor: not-allowed;
+}
+
+
+@media (min-width: 768px) {
+    .main {
+            max-width: 100%;
+    }
+	.mainBlockImgWolna, .coloText, .linePrize, .linePrizeTotal, .lineParticipate, .lineParticipate{
+		display:none;
+	}
+	.mainBlock{
+		    background: radial-gradient(circle at 50% 45%, rgba(255, 0, 0, 0.8) 0%, transparent 0%), radial-gradient(circle at 70% 60%, rgba(255, 0, 0, 0.6) 0%, transparent 0%), radial-gradient(circle at center, #910101 0%, #910101 0%);
+	}
+	.santa{
+		text-align:center;
+	}
+	.winer .main{
+		width:450px;
+	}
+	.mainBlockText{
+		font-size: 158px;
+	}
+	.mainBlockTitel, .mainBlockDescription{
+		    font-size: 55px;
+	}
 }
 </style>
 </body>
