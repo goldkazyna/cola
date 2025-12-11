@@ -56,7 +56,67 @@
             </div>
         </main>
     </div>
+	<style>
+	/* Radio и Checkbox группы */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 5px;
+}
 
+.radio-label,
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.radio-label input,
+.checkbox-label input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #910101;
+}
+
+/* Диапазон дат */
+.date-range {
+    display: flex;
+    gap: 15px;
+}
+
+.date-range > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.date-range input[type="date"] {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.date-inputs {
+    display: flex;
+    align-items: flex-end;
+}
+
+/* Обновляем export-form */
+.export-form {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.export-form .form-group {
+    margin-bottom: 0;
+}
+	</style>
     <script src="{{ asset('script/admin.js') }}"></script>
     @stack('scripts')
 </body>

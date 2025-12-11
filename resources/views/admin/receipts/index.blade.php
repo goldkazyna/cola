@@ -15,18 +15,7 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label>Период</label>
-            <select name="period">
-                <option value="">Все</option>
-                @foreach($periods as $period)
-                <option value="{{ $period['drawing_date'] }}" {{ request('period') == $period['drawing_date'] ? 'selected' : '' }}>
-                    {{ $period['name'] }}
-                </option>
-                @endforeach
-            </select>
-        </div>
-
+        
         <div class="form-group">
             <label>Телефон</label>
             <input type="text" name="phone" value="{{ request('phone') }}" placeholder="+7...">
@@ -45,16 +34,54 @@
     <form action="{{ route('admin.receipts.export') }}" method="GET" class="export-form">
         <div class="form-group">
             <label>Период</label>
-            <select name="period">
-                <option value="">Все одобренные</option>
-                @foreach($periods as $period)
-                <option value="{{ $period['drawing_date'] }}">{{ $period['name'] }}</option>
-                @endforeach
-            </select>
+            <div class="radio-group">
+                <label class="radio-label">
+                    <input type="radio" name="period_type" value="all" checked onchange="toggleDateInputs(this)">
+                    За весь период
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="period_type" value="dates" onchange="toggleDateInputs(this)">
+                    По датам
+                </label>
+            </div>
         </div>
+        
+        <div class="form-group date-inputs" id="date-inputs" style="display: none;">
+            <div class="date-range">
+                <div>
+                    <label>От</label>
+                    <input type="date" name="date_from">
+                </div>
+                <div>
+                    <label>До</label>
+                    <input type="date" name="date_to">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" name="approved_only" value="1" checked>
+                Только одобренные
+            </label>
+        </div>
+        
         <button type="submit" class="btn btn-success">Скачать Excel</button>
     </form>
 </div>
+
+@push('scripts')
+<script>
+function toggleDateInputs(radio) {
+    const dateInputs = document.getElementById('date-inputs');
+    if (radio.value === 'dates') {
+        dateInputs.style.display = 'flex';
+    } else {
+        dateInputs.style.display = 'none';
+    }
+}
+</script>
+@endpush
 
 <!-- Таблица чеков -->
 <div class="card">
@@ -64,6 +91,8 @@
                 <th>ID</th>
                 <th>Фото</th>
                 <th>Телефон</th>
+				<th>Имя</th>
+				<th>Город</th>
                 <th>Дата</th>
                 <th>Статус</th>
                 <th>Действия</th>
@@ -80,6 +109,8 @@
                          onclick="openModal('{{ Storage::url($receipt->image_path) }}')">
                 </td>
                 <td>{{ $receipt->user->phone }}</td>
+				<td>{{ $receipt->user->name }}</td>
+				<td>{{ $receipt->user->city }}</td>
                 <td>{{ $receipt->created_at->format('d.m.Y H:i') }}</td>
                 <td>
                     @if($receipt->status == 'approved')
