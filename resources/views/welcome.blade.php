@@ -5,12 +5,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style/main.css?v={{ filemtime(public_path('style/receipts.css')) }}">
+	<link rel="stylesheet" href="{{ asset('style/main.css') }}?v={{ filemtime(public_path('style/main.css')) }}">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<script src="{{ asset('script/sms-auth.js') }}?v={{ filemtime(public_path('style/receipts.css')) }}"></script>
+	<script src="{{ asset('script/sms-auth.js') }}?v={{ filemtime(public_path('script/sms-auth.js')) }}"></script>
 	<link rel="stylesheet" href="{{ asset('style/receipts.css') }}?v={{ filemtime(public_path('style/receipts.css')) }}">
-	<script src="{{ asset('script/receipts.js') }}?v={{ filemtime(public_path('style/receipts.css')) }}"></script>
-	<script src="{{ asset('script/lang.js') }}?v={{ filemtime(public_path('style/receipts.css')) }}"></script>
+	<script src="{{ asset('script/receipts.js') }}?v={{ filemtime(public_path('script/receipts.js')) }}"></script>
+	<script src="{{ asset('script/lang.js') }}?v={{ filemtime(public_path('script/lang.js')) }}"></script>
     <title>Coca-Cola x Small — Новогодняя акция 2025</title>
 	<link rel="icon" type="image/png" href="{{ asset('assets/favicon.png') }}">
 </head>
