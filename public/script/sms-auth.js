@@ -143,8 +143,9 @@ const SmsAuth = {
 			submitBtn.textContent = 'ПРОВЕРКА...';
 
 			try {
+				console.log('Отправляем данные:', { phone, phoneConfirm, name, surname, city });
 				const result = await this.verifyPhone(phone, phoneConfirm, name, surname, city);
-
+				console.log('Ответ сервера:', result);
 				if (result.success) {
 					if (result.csrf_token) {
 						const csrfMeta = document.querySelector('meta[name="csrf-token"]');
@@ -166,6 +167,7 @@ const SmsAuth = {
 						Receipts.loadUserReceipts();
 					}
 				} else {
+					console.log('Ошибка:', result.message);
 					this.showError('auth', result.message || 'Ошибка авторизации');
 					if (confirmInput) {
 						confirmInput.value = '+7 ';
@@ -173,7 +175,7 @@ const SmsAuth = {
 					}
 				}
 			} catch (error) {
-				console.error('Ошибка:', error);
+				console.error('Ошибка catch:', error);
 				this.showError('auth', 'Ошибка соединения с сервером');
 			} finally {
 				submitBtn.disabled = false;
@@ -209,15 +211,29 @@ const SmsAuth = {
 	},
     // ===== API =====
 	async verifyPhone(phone, phoneConfirm, name, surname, city) {
+		console.log('verifyPhone вызван с:', { phone, phoneConfirm, name, surname, city });
+		
 		const response = await fetch('/auth/verify-phone', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				'X-CSRF-TOKEN': this.getCSRFToken(),
 			},
-			body: JSON.stringify({ phone, phone_confirm: phoneConfirm, name, surname, city }),
+			body: JSON.stringify({ 
+				phone, 
+				phone_confirm: phoneConfirm, 
+				name, 
+				surname, 
+				city 
+			}),
 		});
-		return response.json();
+		
+		console.log('Response status:', response.status);
+		
+		const data = await response.json();
+		console.log('Response data:', data);
+		
+		return data;
 	},
 
     async checkAuthStatus() {
