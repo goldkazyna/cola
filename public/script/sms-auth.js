@@ -66,6 +66,7 @@ const SmsAuth = {
 
 		const phoneInput = document.getElementById('phone-input');
 		const nameInput = document.getElementById('name-input');
+		const surnameInput = document.getElementById('surname-input');
 		const cityInput = document.getElementById('city-input');
 		const confirmWrapper = document.getElementById('phone-confirm-wrapper');
 		const confirmInput = document.getElementById('phone-confirm-input');
@@ -76,14 +77,14 @@ const SmsAuth = {
 			this.applyPhoneMask(confirmInput);
 		}
 
-		// Показываем второе поле когда первый номер полный
+		// Показываем второе поле когда всё заполнено
 		phoneInput.addEventListener('input', () => {
 			const phone = phoneInput.value.trim();
 			const name = nameInput ? nameInput.value.trim() : '';
+			const surname = surnameInput ? surnameInput.value.trim() : '';
 			const city = cityInput ? cityInput.value.trim() : '';
 			
-			// Показываем подтверждение только когда всё заполнено
-			if (phone.length >= 16 && name.length >= 2 && city.length >= 2) {
+			if (phone.length >= 16 && name.length >= 2 && surname.length >= 2 && city.length >= 2) {
 				confirmWrapper.style.display = 'block';
 				confirmInput.value = '+7 ';
 				confirmInput.focus();
@@ -105,6 +106,7 @@ const SmsAuth = {
 			e.preventDefault();
 			
 			const name = nameInput ? nameInput.value.trim() : '';
+			const surname = surnameInput ? surnameInput.value.trim() : '';
 			const city = cityInput ? cityInput.value.trim() : '';
 			const phone = phoneInput.value.trim();
 			const phoneConfirm = confirmInput ? confirmInput.value.trim() : '';
@@ -112,6 +114,11 @@ const SmsAuth = {
 			// Проверки
 			if (name.length < 2) {
 				this.showError('auth', 'Введите имя');
+				return;
+			}
+
+			if (surname.length < 2) {
+				this.showError('auth', 'Введите фамилию');
 				return;
 			}
 			
@@ -136,7 +143,7 @@ const SmsAuth = {
 			submitBtn.textContent = 'ПРОВЕРКА...';
 
 			try {
-				const result = await this.verifyPhone(phone, phoneConfirm, name, city);
+				const result = await this.verifyPhone(phone, phoneConfirm, name, surname, city);
 
 				if (result.success) {
 					if (result.csrf_token) {
@@ -149,6 +156,7 @@ const SmsAuth = {
 					
 					// Сброс формы
 					if (nameInput) nameInput.value = '';
+					if (surnameInput) surnameInput.value = '';
 					if (cityInput) cityInput.value = '';
 					phoneInput.value = '+7 ';
 					if (confirmInput) confirmInput.value = '';
@@ -200,14 +208,14 @@ const SmsAuth = {
 		});
 	},
     // ===== API =====
-    async verifyPhone(phone, phoneConfirm, name, city) {
+	async verifyPhone(phone, phoneConfirm, name, surname, city) {
 		const response = await fetch('/auth/verify-phone', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				'X-CSRF-TOKEN': this.getCSRFToken(),
 			},
-			body: JSON.stringify({ phone, phone_confirm: phoneConfirm, name, city }),
+			body: JSON.stringify({ phone, phone_confirm: phoneConfirm, name, surname, city }),
 		});
 		return response.json();
 	},

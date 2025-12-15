@@ -103,6 +103,7 @@ class AuthController extends Controller
 				'phone' => 'required|string|min:10|max:20',
 				'phone_confirm' => 'required|string|min:10|max:20',
 				'name' => 'required|string|min:2|max:100',
+				'surname' => 'required|string|min:2|max:100',
 				'city' => 'required|string|min:2|max:100',
 			]);
 
@@ -119,13 +120,13 @@ class AuthController extends Controller
 			// Создаём или находим юзера
 			$user = User::firstOrCreate(
 				['phone' => $phone],
-				['name' => $request->name, 'city' => $request->city]
+				['name' => $request->name, 'surname' => $request->surname, 'city' => $request->city]
 			);
-			
 			// Если юзер уже был — обновляем имя и город
 			if (!$user->wasRecentlyCreated) {
 				$user->update([
 					'name' => $request->name,
+					'surname' => $request->surname,
 					'city' => $request->city,
 				]);
 			}

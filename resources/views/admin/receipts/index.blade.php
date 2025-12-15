@@ -91,6 +91,7 @@ function toggleDateInputs(radio) {
                 <th>ID</th>
                 <th>Фото</th>
                 <th>Телефон</th>
+				<th>Фамилия</th>
 				<th>Имя</th>
 				<th>Город</th>
                 <th>Дата</th>
@@ -109,6 +110,7 @@ function toggleDateInputs(radio) {
                          onclick="openModal('{{ Storage::url($receipt->image_path) }}')">
                 </td>
                 <td>{{ $receipt->user->phone }}</td>
+				<td>{{ $receipt->user->surname }}</td>
 				<td>{{ $receipt->user->name }}</td>
 				<td>{{ $receipt->user->city }}</td>
                 <td>{{ $receipt->created_at->format('d.m.Y H:i') }}</td>

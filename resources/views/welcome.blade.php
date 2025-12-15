@@ -56,7 +56,7 @@
 						<p class="auth-error" id="auth-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
 						
 						<input type="text" placeholder="Ваше имя" required id="name-input">
-						
+						<input type="text" placeholder="Фамилия" required id="surname-input">
 						<input type="text" placeholder="Город" required id="city-input">
 						
 						<input type="tel" placeholder="+7 (000) 000-00-00" required id="phone-input" inputmode="numeric">
@@ -502,7 +502,9 @@
             <img class="footerLogo" src="assets/cocacola.png" alt="">
 
             <a class="footerContentText" href="/upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola рус + каз.pdf" data-lang="footer.rules">Полные правила акции</a>
-
+			<p class="footerContactInfo">
+				Есть вопросы? Пишите: <a href="tel:+77070345012">+7 707 034 5012</a>
+			</p>
             <p class="footerContentUnder">2025 - 2026 Сoca-Cola x Small</p>
         </div>
     </div>
@@ -512,6 +514,22 @@
 <script src="script/index.js"></script>
 <style>
 /* Чекбокс согласия с правилами */
+.footerContactInfo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+}
+
+.footerContactInfo a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footerContactInfo a:hover {
+    text-decoration: underline;
+}
 .agree-checkbox {
     display: flex;
     align-items: flex-start;

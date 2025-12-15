@@ -128,13 +128,14 @@ class ReceiptController extends Controller
 			fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
 			
 			// Заголовки
-			fputcsv($file, ['ID', 'Телефон', 'Имя', 'Город', 'Дата загрузки', 'Статус'], ';');
+			fputcsv($file, ['ID', 'Фамилия', 'Имя', 'Телефон', 'Город', 'Дата загрузки', 'Статус'], ';');
 
 			foreach ($receipts as $receipt) {
 				fputcsv($file, [
 					$receipt->id,
-					$receipt->user->phone,
+					$receipt->user->surname ?? '',
 					$receipt->user->name ?? '',
+					$receipt->user->phone,
 					$receipt->user->city ?? '',
 					$receipt->created_at->format('d.m.Y H:i'),
 					$receipt->status === 'approved' ? 'Одобрен' : ($receipt->status === 'rejected' ? 'Отклонён' : 'На проверке'),
