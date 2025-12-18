@@ -4,28 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\SmsCode;
+use App\Services\SmsService;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class AuthController extends Controller
 {
-
     // Отправка SMS-кода
     public function sendCode(Request $request)
     {
         $request->validate([
             'phone' => 'required|string|min:10|max:20',
+            'name' => 'required|string|min:2|max:100',
+            'surname' => 'required|string|min:2|max:100',
+            'city' => 'required|string|min:2|max:100',
         ]);
 
-        // Очищаем номер от лишних символов
         $phone = preg_replace('/[^0-9+]/', '', $request->phone);
 
         // Удаляем старые коды для этого номера
         SmsCode::where('phone', $phone)->delete();
 
         // Генерируем 4-значный код
-        $code = '1111';
+        $code = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
         // Сохраняем код (действует 5 минут)
         SmsCode::create([
@@ -34,15 +37,20 @@ class AuthController extends Controller
             'expires_at' => Carbon::now()->addMinutes(5),
         ]);
 
-        // TODO: Здесь будет отправка SMS через шлюз
-        // Пока просто логируем код для тестирования
-        \Log::info("SMS Code for {$phone}: {$code}");
+        // Отправляем SMS
+        $smsService = new SmsService();
+        $sent = $smsService->sendCode($phone, $code);
+
+        if (!$sent) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка отправки SMS. Попробуйте позже.',
+            ], 500);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Код отправлен',
-            // Для тестирования показываем код (убрать в продакшене!)
-            'debug_code' => $code,
         ]);
     }
 
@@ -52,6 +60,9 @@ class AuthController extends Controller
         $request->validate([
             'phone' => 'required|string',
             'code' => 'required|string|size:4',
+            'name' => 'required|string|min:2|max:100',
+            'surname' => 'required|string|min:2|max:100',
+            'city' => 'required|string|min:2|max:100',
         ]);
 
         $phone = preg_replace('/[^0-9+]/', '', $request->phone);
@@ -72,14 +83,26 @@ class AuthController extends Controller
         // Код верный — удаляем его
         $smsCode->delete();
 
-        // Находим или создаём пользователя
-        $user = User::firstOrCreate(['phone' => $phone]);
-		
-		if ($user->wasRecentlyCreated) {
-			$telegram = new \App\Services\TelegramService();
-			$telegram->notifyNewUser($phone);
-		}	
-        // Авторизуем с запоминанием на 30 дней
+        // Создаём или находим юзера
+        $user = User::firstOrCreate(
+            ['phone' => $phone],
+            ['name' => $request->name, 'surname' => $request->surname, 'city' => $request->city]
+        );
+
+        // Если юзер уже был — обновляем данные
+        if (!$user->wasRecentlyCreated) {
+            $user->update([
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'city' => $request->city,
+            ]);
+        }
+
+        if ($user->wasRecentlyCreated) {
+            $telegram = new TelegramService();
+            $telegram->notifyNewUser($phone);
+        }
+
         Auth::login($user, true);
 
         return response()->json([
@@ -88,68 +111,13 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'phone' => $user->phone,
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'city' => $user->city,
             ],
-			'csrf_token' => csrf_token(),
+            'csrf_token' => csrf_token(),
         ]);
     }
-	
-		// ============================================
-		// ВРЕМЕННАЯ АВТОРИЗАЦИЯ (пока нет SMS доступов)
-		// ============================================
-
-		public function verifyPhone(Request $request)
-		{
-			$request->validate([
-				'phone' => 'required|string|min:10|max:20',
-				'phone_confirm' => 'required|string|min:10|max:20',
-				'name' => 'required|string|min:2|max:100',
-				'surname' => 'required|string|min:2|max:100',
-				'city' => 'required|string|min:2|max:100',
-			]);
-
-			$phone = preg_replace('/[^0-9+]/', '', $request->phone);
-			$phoneConfirm = preg_replace('/[^0-9+]/', '', $request->phone_confirm);
-
-			if ($phone !== $phoneConfirm) {
-				return response()->json([
-					'success' => false,
-					'message' => 'Номера телефонов не совпадают',
-				], 422);
-			}
-
-			// Создаём или находим юзера
-			$user = User::firstOrCreate(
-				['phone' => $phone],
-				['name' => $request->name, 'surname' => $request->surname, 'city' => $request->city]
-			);
-			// Если юзер уже был — обновляем имя и город
-			if (!$user->wasRecentlyCreated) {
-				$user->update([
-					'name' => $request->name,
-					'surname' => $request->surname,
-					'city' => $request->city,
-				]);
-			}
-			
-			if ($user->wasRecentlyCreated) {
-				$telegram = new \App\Services\TelegramService();
-				$telegram->notifyNewUser($phone);
-			}
-			
-			Auth::login($user, true);
-
-			return response()->json([
-				'success' => true,
-				'message' => 'Успешная авторизация',
-				'user' => [
-					'id' => $user->id,
-					'phone' => $user->phone,
-					'name' => $user->name,
-					'city' => $user->city,
-				],
-				'csrf_token' => csrf_token(),
-			]);
-		}
 
     // Проверка статуса авторизации
     public function check()
@@ -160,6 +128,9 @@ class AuthController extends Controller
                 'user' => [
                     'id' => Auth::user()->id,
                     'phone' => Auth::user()->phone,
+                    'name' => Auth::user()->name,
+                    'surname' => Auth::user()->surname,
+                    'city' => Auth::user()->city,
                 ],
             ]);
         }

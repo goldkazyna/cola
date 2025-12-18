@@ -47,66 +47,55 @@
             <!-- Окно авторизации -->
 			<div class="auth-window">
 				<div class="auth-header">
-					<h2 data-lang="auth.title">АВТОРИЗАЦИЯ</h2>
+					<h2>АВТОРИЗАЦИЯ</h2>
 				</div>
 				<div class="auth-content">
 					<form class="auth-form" id="auth-form">
-						<p class="auth-formText" data-lang="auth.subtitle">Укажите данные</p>
+						<p class="auth-formText">Заполните данные</p>
 						
 						<p class="auth-error" id="auth-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
 						
-						<input type="text" placeholder="Ваше имя" required id="name-input">
+						<input type="text" placeholder="Имя" required id="name-input">
 						<input type="text" placeholder="Фамилия" required id="surname-input">
 						<input type="text" placeholder="Город" required id="city-input">
-						
 						<input type="tel" placeholder="+7 (000) 000-00-00" required id="phone-input" inputmode="numeric">
-						
-						<!-- Второе поле (скрыто по умолчанию) -->
-						<div id="phone-confirm-wrapper" style="display: none;">
-							<p class="auth-formText" data-lang="auth.confirm">Введите повторно номер телефона</p>
-							<input type="tel" placeholder="+7 (000) 000-00-00" id="phone-confirm-input" inputmode="numeric" style="width:100%; padding:15px 0px;">
-						</div>
 						
 						<label class="agree-checkbox">
 							<input type="checkbox" id="agree-rules" required checked>
-							<span>Я согласен с <a href="upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola рус + каз.pdf" target="_blank">правилами акции</a></span>
+							<span>Я согласен с <a href="upload/Правила_и_условия_участия_Сделай новый год ярче с Coca-Cola.pdf" target="_blank">правилами акции</a></span>
 						</label>
 						
-						<button type="submit" class="auth-submit" id="auth-submit" data-lang="auth.button">ПРОДОЛЖИТЬ</button>
+						<button type="submit" class="auth-submit" id="auth-submit">ПОЛУЧИТЬ SMS КОД</button>
 					</form>
-					<div class="auth-links">
-						<p class="auth-links-text" data-lang="auth.hint">
-							Введите номер телефона<br>
-							для авторизации
-						</p>
-					</div>
 				</div>
 			</div>
 
-            <!-- Окно верификации -->
-            <div class="auth-verification">
-                <div class="auth-header">
-                    <h2 data-lang="verify.title">ВЕРИФИКАЦИЯ</h2>
-                </div>
-                <div class="verification-content">
-                    <p class="verification-text" data-lang="verify.subtitle">Укажите Код из SMS</p>
+			<!-- Окно верификации -->
+			<div class="auth-verification">
+				<div class="auth-header">
+					<h2>ВВЕДИТЕ КОД</h2>
+				</div>
+				<div class="verification-content">
+					<p class="verification-text">Введите код из SMS</p>
 					
 					<p class="verification-error" id="verification-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
-                    <form class="verification-form" id="verification-form">
-                        <div class="code-inputs">
-                            <input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="0">
-							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="1">
-							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="2">
-							<input type="tel" inputmode="numeric" maxlength="1" class="code-input" data-index="3">
-                        </div>
-                        <button type="submit" class="verification-submit" data-lang="verify.button">Войти</button>
-                    </form>
-                    <div class="verification-links">
-                        <a class="no-code" href="" data-lang="verify.nocode">Не получили код?</a>
-                        <a href="#" class="resend-code" id="resend-code" data-lang="verify.resend">Отправить код повторно</a>
-                    </div>
-                </div>
-            </div>
+					
+					<form class="verification-form" id="verification-form">
+						<div class="code-inputs">
+							<input type="text" maxlength="1" class="code-input" inputmode="numeric">
+							<input type="text" maxlength="1" class="code-input" inputmode="numeric">
+							<input type="text" maxlength="1" class="code-input" inputmode="numeric">
+							<input type="text" maxlength="1" class="code-input" inputmode="numeric">
+						</div>
+						<button type="submit" class="verification-submit">ВОЙТИ</button>
+					</form>
+					
+					<div class="verification-links">
+						<p class="no-code">Повторная отправка через 60 сек</p>
+						<a href="#" class="resend-code disabled" id="resend-code">Отправить код повторно</a>
+					</div>
+				</div>
+			</div>
 
             <!-- Окно Мои чеки -->
             <div class="auth-checks">
