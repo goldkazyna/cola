@@ -7,15 +7,16 @@ const SmsAuth = {
     timerSeconds: 60,
     isAuthenticated: false,
 
-    init() {
-        this.initPhoneMask();
-        this.initAuthForm();
-        this.initVerificationForm();
-        this.initResendCode();
-        this.initUploadButtons();
-        this.initAgreeCheckbox();
-        this.checkAuthStatus();
-    },
+	init() {
+		this.initPhoneMask();
+		this.initAuthForm();
+		this.initVerificationForm();
+		this.initResendCode();
+		this.initFallback();  // <-- добавь
+		this.initUploadButtons();
+		this.initAgreeCheckbox();
+		this.checkAuthStatus();
+	},
 
     getCSRFToken() {
         return document.querySelector('meta[name="csrf-token"]')?.content;
@@ -120,7 +121,139 @@ const SmsAuth = {
             }
         });
     },
+	// ===== Fallback — подтверждение по номеру =====
+	initFallback() {
+		const noSmsLink = document.getElementById('no-sms-link');
+		const fallbackSection = document.getElementById('fallback-section');
+		const fallbackInput = document.getElementById('fallback-phone-input');
+		const fallbackSubmit = document.getElementById('fallback-submit');
+		const verificationForm = document.getElementById('verification-form');
+		const codeInputs = document.querySelector('.code-inputs');
+		
+		if (!noSmsLink || !fallbackSection) return;
+		
+		// Применяем маску к fallback полю
+		if (fallbackInput) {
+			this.applyPhoneMask(fallbackInput);
+		}
+		
+		// Клик "Не пришло SMS?"
+		noSmsLink.addEventListener('click', (e) => {
+			e.preventDefault();
+			
+			// Скрываем форму с кодом
+			if (codeInputs) codeInputs.style.display = 'none';
+			if (verificationForm) {
+				verificationForm.querySelector('.verification-submit').style.display = 'none';
+			}
+			
+			// Показываем fallback
+			fallbackSection.style.display = 'block';
+			noSmsLink.style.display = 'none';
+			
+			// Фокус на поле
+			if (fallbackInput) {
+				fallbackInput.value = '+7 ';
+				fallbackInput.focus();
+			}
+		});
+		
+		// Отправка fallback
+		if (fallbackSubmit) {
+			fallbackSubmit.addEventListener('click', async () => {
+				const fallbackPhone = fallbackInput.value.trim();
+				
+				if (fallbackPhone.length < 16) {
+					this.showError('verification', 'Введите полный номер телефона');
+					return;
+				}
+				
+				// Очищаем номера для сравнения
+				const phone1 = this.currentPhone.replace(/\D/g, '');
+				const phone2 = fallbackPhone.replace(/\D/g, '');
+				
+				if (phone1 !== phone2) {
+					this.showError('verification', 'Номера телефонов не совпадают');
+					fallbackInput.value = '+7 ';
+					fallbackInput.focus();
+					return;
+				}
+				
+				this.hideError('verification');
+				fallbackSubmit.disabled = true;
+				fallbackSubmit.textContent = 'ПРОВЕРКА...';
+				
+				try {
+					const result = await this.verifyByPhone(this.currentPhone);
+					
+					if (result.success) {
+						if (result.csrf_token) {
+							const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+							if (csrfMeta) csrfMeta.setAttribute('content', result.csrf_token);
+						}
+						
+						this.stopTimer();
+						this.resetVerificationForm();
+						this.openChecksWindow();
+						this.updateAuthUI(true);
+						
+						if (typeof Receipts !== 'undefined') {
+							Receipts.loadUserReceipts();
+						}
+					} else {
+						this.showError('verification', result.message || 'Ошибка авторизации');
+					}
+				} catch (error) {
+					console.error('Ошибка:', error);
+					this.showError('verification', 'Ошибка соединения с сервером');
+				} finally {
+					fallbackSubmit.disabled = false;
+					fallbackSubmit.textContent = 'ПОДТВЕРДИТЬ';
+				}
+			});
+		}
+	},
 
+	// Сброс формы верификации
+	resetVerificationForm() {
+		const codeInputs = document.querySelector('.code-inputs');
+		const verificationForm = document.getElementById('verification-form');
+		const fallbackSection = document.getElementById('fallback-section');
+		const noSmsLink = document.getElementById('no-sms-link');
+		const fallbackInput = document.getElementById('fallback-phone-input');
+		
+		// Показываем обратно код
+		if (codeInputs) codeInputs.style.display = 'flex';
+		if (verificationForm) {
+			verificationForm.querySelector('.verification-submit').style.display = 'block';
+		}
+		
+		// Скрываем fallback
+		if (fallbackSection) fallbackSection.style.display = 'none';
+		if (noSmsLink) noSmsLink.style.display = 'block';
+		if (fallbackInput) fallbackInput.value = '+7 ';
+		
+		// Очищаем код
+		this.clearCodeInputs();
+	},
+
+	// API для fallback авторизации
+	async verifyByPhone(phone) {
+		const response = await fetch('/auth/verify-by-phone', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': this.getCSRFToken(),
+			},
+			body: JSON.stringify({
+				phone: phone,
+				name: this.currentName,
+				surname: this.currentSurname,
+				city: this.currentCity,
+			}),
+		});
+		return response.json();
+	},
     // ===== Форма верификации =====
     initVerificationForm() {
         const verificationForm = document.getElementById('verification-form');

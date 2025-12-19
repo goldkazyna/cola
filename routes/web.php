@@ -23,7 +23,7 @@ Route::post('/auth/verify-phone', [AuthController::class, 'verifyPhone']);
 Route::post('/receipts/upload', [ReceiptController::class, 'upload']);
 Route::get('/receipts', [ReceiptController::class, 'index']);
 Route::delete('/receipts/{id}', [ReceiptController::class, 'delete']);
-
+Route::post('/auth/verify-by-phone', [AuthController::class, 'verifyByPhone']);
 // Админ панель
 Route::prefix('admin')->name('admin.')->group(function () {
     // Авторизация

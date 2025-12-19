@@ -71,6 +71,7 @@
 			</div>
 
 			<!-- Окно верификации -->
+			<!-- Окно верификации -->
 			<div class="auth-verification">
 				<div class="auth-header">
 					<h2>ВВЕДИТЕ КОД</h2>
@@ -80,6 +81,7 @@
 					
 					<p class="verification-error" id="verification-error" style="display: none; color: #ff4444; text-align: center; margin-bottom: 15px; font-family: 'Roboto', sans-serif;"></p>
 					
+					<!-- Ввод SMS кода -->
 					<form class="verification-form" id="verification-form">
 						<div class="code-inputs">
 							<input type="text" maxlength="1" class="code-input" inputmode="numeric">
@@ -90,9 +92,14 @@
 						<button type="submit" class="verification-submit">ВОЙТИ</button>
 					</form>
 					
-					<div class="verification-links">
-						<p class="no-code">Повторная отправка через 60 сек</p>
-						<a href="#" class="resend-code disabled" id="resend-code">Отправить код повторно</a>
+					<!-- Кнопка переключения на fallback -->
+					<a href="#" class="no-sms-link" id="no-sms-link">Не пришло SMS? Подтвердить по номеру</a>
+					
+					<!-- Fallback — ввод номера повторно -->
+					<div class="fallback-section" id="fallback-section" style="display: none;">
+						<p class="fallback-text">Введите номер телефона повторно для подтверждения:</p>
+						<input type="tel" placeholder="+7 (000) 000-00-00" id="fallback-phone-input" inputmode="numeric">
+						<button type="button" class="verification-submit" id="fallback-submit">ПОДТВЕРДИТЬ</button>
 					</div>
 				</div>
 			</div>
@@ -579,6 +586,53 @@
 	.mainBlockTitel, .mainBlockDescription{
 		    font-size: 55px;
 	}
+}
+
+/* Fallback секция */
+.fallback-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.fallback-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.fallback-section input {
+    width: 100%;
+    padding: 15px 20px;
+    border: none;
+    background: #6666662e;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+/* Ссылка "Не пришло SMS?" */
+.no-sms-link {
+    display: block;
+    text-align: center;
+    color: #910101;
+    text-decoration: none;
+    font-family: 'K_TCCCUnity', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(145, 1, 1, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.no-sms-link:hover {
+    background: rgba(145, 1, 1, 0.2);
+    color: #b10202;
 }
 </style>
 </body>

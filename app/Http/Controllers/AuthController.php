@@ -152,4 +152,55 @@ class AuthController extends Controller
             'message' => 'Вы вышли из системы',
         ]);
     }
+	
+	// Fallback авторизация по номеру (без SMS)
+	public function verifyByPhone(Request $request)
+	{
+		$request->validate([
+			'phone' => 'required|string|min:10|max:20',
+			'name' => 'required|string|min:2|max:100',
+			'surname' => 'required|string|min:2|max:100',
+			'city' => 'required|string|min:2|max:100',
+		]);
+
+		$phone = preg_replace('/[^0-9+]/', '', $request->phone);
+
+		// Удаляем старые коды для этого номера (если были)
+		SmsCode::where('phone', $phone)->delete();
+
+		// Создаём или находим юзера
+		$user = User::firstOrCreate(
+			['phone' => $phone],
+			['name' => $request->name, 'surname' => $request->surname, 'city' => $request->city]
+		);
+
+		// Если юзер уже был — обновляем данные
+		if (!$user->wasRecentlyCreated) {
+			$user->update([
+				'name' => $request->name,
+				'surname' => $request->surname,
+				'city' => $request->city,
+			]);
+		}
+
+		if ($user->wasRecentlyCreated) {
+			$telegram = new \App\Services\TelegramService();
+			$telegram->notifyNewUser($phone);
+		}
+
+		Auth::login($user, true);
+
+		return response()->json([
+			'success' => true,
+			'message' => 'Успешная авторизация',
+			'user' => [
+				'id' => $user->id,
+				'phone' => $user->phone,
+				'name' => $user->name,
+				'surname' => $user->surname,
+				'city' => $user->city,
+			],
+			'csrf_token' => csrf_token(),
+		]);
+	}
 }
