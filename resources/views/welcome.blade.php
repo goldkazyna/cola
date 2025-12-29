@@ -351,32 +351,166 @@
             <h2 class="winerText" data-lang="winners.title">ПОБЕДИТЕЛИ</h2>
 
             <div class="header-accordion">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 15.12.2025</span>
-                    <span class="accordion-arrow">▼</span>
-                </div>
-
-                <div class="accordion-content">
-                    <div class="winners-table">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th data-lang="winners.date">Дата</th>
-                                <th data-lang="winners.prize">Приз</th>
-                                <th data-lang="winners.phone">Номер</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="accordion-title">Победители 15.12.2025</span>
+        <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-content">
+        <div class="winners-table">
+            <table>
+                <thead>
+                <tr>
+                    <th data-lang="winners.name" style="width:40%">Имя</th>
+                    <th data-lang="winners.prize" style="width:20%">Приз</th>
+                    <th data-lang="winners.phone" style="width:40%">Номер</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Ёлка -->
+                <tr>
+                    <td>Манакпаева Жанар</td>
+                    <td>Ёлка</td>
+                    <td>+7 771 *** ** 95</td>
+                </tr>
+                <tr>
+                    <td>Шельпяков Михаил</td>
+                    <td>Ёлка</td>
+                    <td>+7 707 *** ** 61</td>
+                </tr>
+                <tr>
+                    <td>Шарабарина Алена</td>
+                    <td>Ёлка</td>
+                    <td>+7 705 *** ** 86</td>
+                </tr>
+                <!-- Камера -->
+                <tr>
+                    <td>Турганбек Зарина</td>
+                    <td>Камера</td>
+                    <td>+7 707 *** ** 53</td>
+                </tr>
+                <!-- Посуда -->
+                <tr>
+                    <td>Шахаров Азамат</td>
+                    <td>Посуда</td>
+                    <td>+7 707 *** ** 11</td>
+                </tr>
+                <tr>
+                    <td>Самбетбаев Айдар</td>
+                    <td>Посуда</td>
+                    <td>+7 701 *** ** 34</td>
+                </tr>
+                <tr>
+                    <td>Нуртазина Лаура</td>
+                    <td>Посуда</td>
+                    <td>+7 777 *** ** 25</td>
+                </tr>
+                <!-- Сертификат 20 000 -->
+                <tr>
+                    <td>Александр</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 771 *** ** 15</td>
+                </tr>
+                <tr>
+                    <td>Шерхан</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 707 *** ** 96</td>
+                </tr>
+                <tr>
+                    <td>Сымбат</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 705 *** ** 99</td>
+                </tr>
+                <tr>
+                    <td>Акмарал</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 701 *** ** 78</td>
+                </tr>
+                <tr>
+                    <td>Даулет</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 771 *** ** 12</td>
+                </tr>
+                <tr>
+                    <td>Ринат</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 702 *** ** 82</td>
+                </tr>
+                <tr>
+                    <td>Федор</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 708 *** ** 80</td>
+                </tr>
+                <tr>
+                    <td>Ришат</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 771 *** ** 17</td>
+                </tr>
+                <tr>
+                    <td>Артем</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 778 *** ** 88</td>
+                </tr>
+                <tr>
+                    <td>Нурхан</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 707 *** ** 72</td>
+                </tr>
+                <!-- Coca-Cola -->
+                <tr>
+                    <td>Бисиков Рустам</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 708 *** ** 58</td>
+                </tr>
+                <tr>
+                    <td>Айтжан Аида</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 707 *** ** 93</td>
+                </tr>
+                <tr>
+                    <td>Сметова Сапаргуль</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 747 *** ** 24</td>
+                </tr>
+                <tr>
+                    <td>Сейтказин Баянбек</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 775 *** ** 09</td>
+                </tr>
+                <tr>
+                    <td>Егимбаева Диана</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 705 *** ** 85</td>
+                </tr>
+                <tr>
+                    <td>Жадигер Медет</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 707 *** ** 05</td>
+                </tr>
+                <tr>
+                    <td>Сагандыкова Меруерт</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 775 *** ** 64</td>
+                </tr>
+                <tr>
+                    <td>Сейтказин Руслан</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 775 *** ** 10</td>
+                </tr>
+                <tr>
+                    <td>Кусаинов Альнур</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 700 *** ** 52</td>
+                </tr>
+                <tr>
+                    <td>Абитова Алия</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 776 *** ** 00</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
@@ -462,33 +596,8 @@
                 </div>
             </div>
 			
-			<div class="header-accordion">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 16.01.2026</span>
-                    <span class="accordion-arrow">▼</span>
-                </div>
+			<!-- Ёлка -->
 
-                <div class="accordion-content">
-                    <div class="winners-table">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th data-lang="winners.date">Дата</th>
-                                <th data-lang="winners.prize">Приз</th>
-                                <th data-lang="winners.phone">Номер</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
