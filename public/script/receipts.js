@@ -206,12 +206,12 @@ const Receipts = {
     },
 
     // ===== Загрузка чека на сервер =====
+	// ===== Загрузка чека на сервер =====
 	async uploadReceipt(file) {
 		const formData = new FormData();
 		formData.append('image', file);
 
 		const csrfToken = this.getCSRFToken();
-		console.log('CSRF Token:', csrfToken); // Отладка
 
 		try {
 			const response = await fetch('/receipts/upload', {
@@ -222,16 +222,16 @@ const Receipts = {
 				body: formData,
 			});
 
-			console.log('Response status:', response.status); // Отладка
-
+			const result = await response.json();
+			
 			if (!response.ok) {
-				const text = await response.text();
-				console.log('Error response:', text); // Отладка
+				console.log('Error response:', result);
+				return { success: false, message: result.message || 'Ошибка загрузки' };
 			}
 
-			return response.json();
+			return result;
 		} catch (error) {
-			console.error('Upload error:', error); // Отладка
+			console.error('Upload error:', error);
 			throw error;
 		}
 	},
