@@ -511,7 +511,41 @@
         </div>
     </div>
 </div>
+<style>
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #910101;
+}
 
+.accordion-content.open {
+    display: flex;
+    max-height: 400px;  /* Увеличил высоту */
+    max-width: 100%;
+    justify-content: center;
+    overflow-y: auto;   /* Добавляем скролл */
+}
+
+/* Красивый скроллбар */
+.accordion-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.accordion-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.accordion-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
+}
+
+.accordion-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+</style>
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
                     <span class="accordion-title">Победители 22.12.2025</span>
