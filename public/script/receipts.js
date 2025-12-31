@@ -2,16 +2,7 @@
 
 const Receipts = {
     uploadedFiles: [],
-	translateDrawingName(name) {
-		const lang = (typeof Lang !== 'undefined') ? Lang.current : 'ru';
-		if (lang === 'kk') {
-			return name
-				.replace('Розыгрыш', 'Ұтыс')
-				.replace('декабря', 'желтоқсан')
-				.replace('января', 'қаңтар');
-		}
-		return name;
-	},
+
     init() {
         this.initUploadButtons();
         this.initUploadForm();
@@ -24,47 +15,63 @@ const Receipts = {
         return document.querySelector('meta[name="csrf-token"]')?.content;
     },
 
-    // Получение перевода
-    getLang(key) {
-        return (typeof Lang !== 'undefined') ? Lang.get(key) : key;
+    // ===== Логирование ошибок на сервер =====
+    async logError(type, message, status = null, extra = {}) {
+        try {
+            await fetch('/log/error', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': this.getCSRFToken(),
+                },
+                body: JSON.stringify({
+                    type: type,
+                    message: message,
+                    status: status,
+                    url: window.location.href,
+                    ...extra,
+                }),
+            });
+        } catch (e) {
+            console.error('Failed to log error:', e);
+        }
     },
 
     // ===== Кнопки выбора (камера/галерея) =====
-	initUploadButtons() {
-		const galleryBtn = document.getElementById('gallery-btn');
-		const cameraBtn = document.getElementById('camera-btn');
-		const fileInput = document.getElementById('file-input');
-		const cameraInput = document.getElementById('camera-input');
+    initUploadButtons() {
+        const galleryBtn = document.getElementById('gallery-btn');
+        const cameraBtn = document.getElementById('camera-btn');
+        const fileInput = document.getElementById('file-input');
+        const cameraInput = document.getElementById('camera-input');
 
-		if (galleryBtn && fileInput) {
-			galleryBtn.addEventListener('click', (e) => {
-				e.stopPropagation();
-				fileInput.click();
-			});
-		}
+        if (galleryBtn && fileInput) {
+            galleryBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.click();
+            });
+        }
 
-		if (cameraBtn && cameraInput) {
-			cameraBtn.addEventListener('click', (e) => {
-				e.stopPropagation();
-				cameraInput.click();
-			});
-		}
+        if (cameraBtn && cameraInput) {
+            cameraBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                cameraInput.click();
+            });
+        }
 
-		// Обработка выбора файла
-		if (fileInput) {
-			fileInput.addEventListener('change', (e) => {
-				this.handleFileSelect(e.target.files);
-				e.target.value = ''; // Сбрасываем чтобы можно было выбрать тот же файл
-			});
-		}
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                this.handleFileSelect(e.target.files);
+                e.target.value = '';
+            });
+        }
 
-		if (cameraInput) {
-			cameraInput.addEventListener('change', (e) => {
-				this.handleFileSelect(e.target.files);
-				e.target.value = ''; // Сбрасываем
-			});
-		}
-	},
+        if (cameraInput) {
+            cameraInput.addEventListener('change', (e) => {
+                this.handleFileSelect(e.target.files);
+                e.target.value = '';
+            });
+        }
+    },
 
     // ===== Обработка выбранного файла =====
     handleFileSelect(files) {
@@ -72,15 +79,13 @@ const Receipts = {
 
         const file = files[0];
 
-        // Проверка типа
         if (!file.type.startsWith('image/')) {
-            this.showError(this.getLang('receipt.error.image'));
+            this.showError('Выберите изображение');
             return;
         }
 
-        // Проверка размера (10MB)
         if (file.size > 10 * 1024 * 1024) {
-            this.showError(this.getLang('receipt.error.size'));
+            this.showError('Файл слишком большой. Максимум 10MB');
             return;
         }
 
@@ -111,12 +116,10 @@ const Receipts = {
 
             previewsContainer.appendChild(preview);
 
-            // Скрываем область выбора
             if (uploadArea) {
                 uploadArea.style.display = 'none';
             }
 
-            // Кнопка удаления превью
             preview.querySelector('.preview-remove').addEventListener('click', () => {
                 this.clearPreview();
             });
@@ -171,219 +174,243 @@ const Receipts = {
             e.preventDefault();
 
             if (this.uploadedFiles.length === 0) {
-                this.showError(this.getLang('receipt.error.select'));
+                this.showError('Выберите фото чека');
                 return;
             }
 
             const submitBtn = uploadForm.querySelector('.upload-submit');
             submitBtn.disabled = true;
-            submitBtn.textContent = this.getLang('receipt.loading');
+            submitBtn.textContent = 'ЗАГРУЗКА...';
 
             try {
                 const result = await this.uploadReceipt(this.uploadedFiles[0]);
 
                 if (result.success) {
-                    // Очищаем форму
                     this.clearPreview();
-                    
-                    // Показываем окно успеха
                     this.showSuccessWindow();
-                    
-                    // Обновляем список чеков
                     this.loadUserReceipts();
                 } else {
-                    this.showError(result.message || this.getLang('receipt.error.upload'));
+                    this.showError(result.message || 'Ошибка загрузки');
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
-                this.showError(this.getLang('receipt.error.connection'));
+                this.showError('Ошибка соединения с сервером');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = this.getLang('upload.submit');
+                submitBtn.textContent = 'ОТПРАВИТЬ';
                 this.updateSubmitButton();
             }
         });
     },
 
     // ===== Загрузка чека на сервер =====
-	// ===== Загрузка чека на сервер =====
-	async uploadReceipt(file) {
-		const formData = new FormData();
-		formData.append('image', file);
+    async uploadReceipt(file) {
+        const formData = new FormData();
+        formData.append('image', file);
 
-		const csrfToken = this.getCSRFToken();
+        const csrfToken = this.getCSRFToken();
 
-		try {
-			const response = await fetch('/receipts/upload', {
-				method: 'POST',
-				headers: {
-					'X-CSRF-TOKEN': csrfToken,
-				},
-				body: formData,
-			});
+        try {
+            const response = await fetch('/receipts/upload', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: formData,
+            });
 
-			const result = await response.json();
-			
-			if (!response.ok) {
-				console.log('Error response:', result);
-				return { success: false, message: result.message || 'Ошибка загрузки' };
-			}
+            // Клонируем чтобы можно было прочитать дважды при ошибке
+            const responseClone = response.clone();
+            
+            let result;
+            try {
+                result = await response.json();
+            } catch (jsonError) {
+                const text = await responseClone.text();
+                
+                // Логируем на сервер
+                await this.logError('upload_parse_error', 'Response is not JSON', response.status, {
+                    response_text: text.substring(0, 1000),
+                    file_name: file.name,
+                    file_size: file.size,
+                });
+                
+                return { success: false, message: 'Ошибка сервера' };
+            }
 
-			return result;
-		} catch (error) {
-			console.error('Upload error:', error);
-			throw error;
-		}
-	},
+            if (!response.ok) {
+                // Логируем на сервер
+                await this.logError('upload_failed', result.message || 'Unknown error', response.status, {
+                    response: result,
+                    file_name: file.name,
+                    file_size: file.size,
+                });
 
-	// ===== Загрузка списка чеков пользователя =====
-	async loadUserReceipts() {
-		const checksContent = document.querySelector('.checks-content');
-		const chancesNumber = document.querySelector('.chances-number');
+                // 419 = CSRF истёк
+                if (response.status === 419) {
+                    alert('Сессия истекла. Страница будет перезагружена.');
+                    window.location.reload();
+                    return { success: false, message: 'Сессия истекла' };
+                }
 
-		if (!checksContent) return;
+                // 401 = не авторизован
+                if (response.status === 401) {
+                    alert('Необходимо авторизоваться заново.');
+                    window.location.reload();
+                    return { success: false, message: 'Не авторизован' };
+                }
 
-		try {
-			const response = await fetch('/receipts');
-			const result = await response.json();
+                return { success: false, message: result.message || 'Ошибка загрузки' };
+            }
 
-			if (result.success) {
-				// Обновляем количество шансов
-				if (chancesNumber) {
-					chancesNumber.textContent = result.chances || 0;
-				}
+            return result;
 
-				// Обновляем информацию о ближайшем розыгрыше
-				this.updateNextDrawingInfo(result.next_drawing);
+        } catch (error) {
+            // Логируем сетевую ошибку на сервер
+            await this.logError('upload_network_error', error.message, null, {
+                error_type: error.name,
+                file_name: file.name,
+                file_size: file.size,
+            });
+            
+            throw error;
+        }
+    },
 
-				// Рендерим чеки по периодам
-				this.renderReceiptsByPeriods(result.periods);
-			}
-		} catch (error) {
-			console.error('Ошибка загрузки чеков:', error);
-		}
-	},
+    // ===== Загрузка списка чеков пользователя =====
+    async loadUserReceipts() {
+        const checksContent = document.querySelector('.checks-content');
+        const chancesNumber = document.querySelector('.chances-number');
 
-	// ===== Информация о ближайшем розыгрыше =====
-	updateNextDrawingInfo(nextDrawing) {
-		let infoBlock = document.querySelector('.next-drawing-info');
-		
-		// Создаём блок если его нет
-		if (!infoBlock) {
-			const chancesBlock = document.querySelector('.chances-count');
-			if (chancesBlock) {
-				infoBlock = document.createElement('div');
-				infoBlock.className = 'next-drawing-info';
-				chancesBlock.after(infoBlock);
-			}
-		}
+        if (!checksContent) return;
 
-		if (infoBlock && nextDrawing) {
-			infoBlock.innerHTML = `
-				<p class="next-drawing-title">${this.getLang('receipt.next.title')}</p>
-				<p class="next-drawing-name">${this.translateDrawingName(nextDrawing.name)}</p>
-				<p class="next-drawing-date">${nextDrawing.date_formatted}</p>
-				${nextDrawing.days_left > 0 ? `<p class="next-drawing-days">${this.getLang('receipt.next.left')} ${this.pluralizeDays(nextDrawing.days_left)}</p>` : `<p class="next-drawing-days">${this.getLang('receipt.next.today')}</p>`}
-			`;
-		} else if (infoBlock) {
-			infoBlock.innerHTML = `<p class="next-drawing-title">${this.getLang('receipt.next.finished')}</p>`;
-		}
-	},
+        try {
+            const response = await fetch('/receipts');
+            const result = await response.json();
 
-	// ===== Склонение дней =====
-	pluralizeDays(n) {
-		n = Math.ceil(n);
-		const lang = (typeof Lang !== 'undefined') ? Lang.current : 'ru';
-		
-		if (lang === 'kk') {
-			return `${n} күн`;
-		}
-		
-		const forms = ['день', 'дня', 'дней'];
-		const n1 = Math.abs(n) % 100;
-		const n2 = n1 % 10;
-		if (n1 > 10 && n1 < 20) return `${n} ${forms[2]}`;
-		if (n2 > 1 && n2 < 5) return `${n} ${forms[1]}`;
-		if (n2 === 1) return `${n} ${forms[0]}`;
-		return `${n} ${forms[2]}`;
-	},
+            if (result.success) {
+                if (chancesNumber) {
+                    chancesNumber.textContent = result.chances || 0;
+                }
+                this.updateNextDrawingInfo(result.next_drawing);
+                this.renderReceiptsByPeriods(result.periods);
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки чеков:', error);
+            this.logError('load_receipts_error', error.message);
+        }
+    },
 
-	// ===== Рендер чеков по периодам =====
-	renderReceiptsByPeriods(periods) {
-		const checksGrid = document.querySelector('.checks-grid');
-		if (!checksGrid) return;
+    // ===== Информация о ближайшем розыгрыше =====
+    updateNextDrawingInfo(nextDrawing) {
+        let infoBlock = document.querySelector('.next-drawing-info');
+        
+        if (!infoBlock) {
+            const chancesBlock = document.querySelector('.chances-count');
+            if (chancesBlock) {
+                infoBlock = document.createElement('div');
+                infoBlock.className = 'next-drawing-info';
+                chancesBlock.after(infoBlock);
+            }
+        }
 
-		checksGrid.innerHTML = '';
+        if (infoBlock && nextDrawing) {
+            infoBlock.innerHTML = `
+                <p class="next-drawing-title">Ближайший розыгрыш:</p>
+                <p class="next-drawing-name">${nextDrawing.name}</p>
+                <p class="next-drawing-date">${nextDrawing.date_formatted}</p>
+                ${nextDrawing.days_left > 0 ? `<p class="next-drawing-days">Осталось ${this.pluralizeDays(nextDrawing.days_left)}</p>` : '<p class="next-drawing-days">Сегодня!</p>'}
+            `;
+        } else if (infoBlock) {
+            infoBlock.innerHTML = '<p class="next-drawing-title">Все розыгрыши завершены</p>';
+        }
+    },
 
-		if (!periods || periods.length === 0) {
-			checksGrid.innerHTML = `<p class="no-receipts">${this.getLang('receipt.empty')}</p>`;
-			return;
-		}
+    // ===== Склонение дней =====
+    pluralizeDays(n) {
+        n = Math.ceil(n);
+        const forms = ['день', 'дня', 'дней'];
+        const n1 = Math.abs(n) % 100;
+        const n2 = n1 % 10;
+        if (n1 > 10 && n1 < 20) return `${n} ${forms[2]}`;
+        if (n2 > 1 && n2 < 5) return `${n} ${forms[1]}`;
+        if (n2 === 1) return `${n} ${forms[0]}`;
+        return `${n} ${forms[2]}`;
+    },
 
-		periods.forEach(period => {
-			// Создаём блок периода
-			const periodBlock = document.createElement('div');
-			periodBlock.className = `period-block ${period.is_passed ? 'period-passed' : 'period-active'}`;
+    // ===== Рендер чеков по периодам =====
+    renderReceiptsByPeriods(periods) {
+        const checksGrid = document.querySelector('.checks-grid');
+        if (!checksGrid) return;
 
-			// Заголовок периода
-			const periodHeader = document.createElement('div');
-			periodHeader.className = 'period-header';
-			periodHeader.innerHTML = `
-				<div class="period-info">
-					<span class="period-name">${this.translateDrawingName(period.drawing_name)}</span>
-					<span class="period-date">${period.drawing_date_formatted}</span>
-				</div>
-				<div class="period-status ${period.is_passed ? 'status-passed' : 'status-upcoming'}">
-					${period.is_passed ? this.getLang('receipt.status.passed') : this.getLang('receipt.status.upcoming')}
-				</div>
-			`;
+        checksGrid.innerHTML = '';
 
-			// Сетка чеков
-			const receiptsGrid = document.createElement('div');
-			receiptsGrid.className = 'period-receipts-grid';
+        if (!periods || periods.length === 0) {
+            checksGrid.innerHTML = '<p class="no-receipts">У вас пока нет загруженных чеков</p>';
+            return;
+        }
 
-			period.receipts.forEach(receipt => {
-				receiptsGrid.appendChild(this.createReceiptItem(receipt, period.is_passed));
-			});
+        periods.forEach(period => {
+            const periodBlock = document.createElement('div');
+            periodBlock.className = `period-block ${period.is_passed ? 'period-passed' : 'period-active'}`;
 
-			periodBlock.appendChild(periodHeader);
-			periodBlock.appendChild(receiptsGrid);
-			checksGrid.appendChild(periodBlock);
-		});
-	},
+            const periodHeader = document.createElement('div');
+            periodHeader.className = 'period-header';
+            periodHeader.innerHTML = `
+                <div class="period-info">
+                    <span class="period-name">${period.drawing_name}</span>
+                    <span class="period-date">${period.drawing_date_formatted}</span>
+                </div>
+                <div class="period-status ${period.is_passed ? 'status-passed' : 'status-upcoming'}">
+                    ${period.is_passed ? 'Розыгрыш прошёл' : 'Ожидается'}
+                </div>
+            `;
 
-	// ===== Создание элемента чека =====
-	createReceiptItem(receipt, isPassed) {
-		const div = document.createElement('div');
-		div.className = `check-item ${isPassed ? 'check-passed' : ''}`;
-		div.dataset.id = receipt.id;
+            const receiptsGrid = document.createElement('div');
+            receiptsGrid.className = 'period-receipts-grid';
 
-		let statusBadge = '';
-		if (isPassed) {
-			statusBadge = `<div class="check-badge passed">${this.getLang('receipt.status.passed')}</div>`;
-		} else if (receipt.drawing_status && receipt.drawing_status.days_left !== undefined) {
-			if (receipt.drawing_status.days_left > 0) {
-				statusBadge = `<div class="check-badge active">${this.getLang('receipt.in')} ${this.pluralizeDays(receipt.drawing_status.days_left)}</div>`;
-			} else {
-				statusBadge = `<div class="check-badge today">${this.getLang('receipt.today')}</div>`;
-			}
-		}
+            period.receipts.forEach(receipt => {
+                receiptsGrid.appendChild(this.createReceiptItem(receipt, period.is_passed));
+            });
 
-		div.innerHTML = `
-			<img src="${receipt.image_url}" alt="Чек" class="check-image">
-			${statusBadge}
-			<div class="check-date">${receipt.created_at}</div>
-			<button class="delete-check" data-id="${receipt.id}">
-				<img src="assets/close-icon.png" alt="Удалить">
-			</button>
-		`;
+            periodBlock.appendChild(periodHeader);
+            periodBlock.appendChild(receiptsGrid);
+            checksGrid.appendChild(periodBlock);
+        });
+    },
 
-		return div;
-	},
+    // ===== Создание элемента чека =====
+    createReceiptItem(receipt, isPassed) {
+        const div = document.createElement('div');
+        div.className = `check-item ${isPassed ? 'check-passed' : ''}`;
+        div.dataset.id = receipt.id;
+
+        let statusBadge = '';
+        if (isPassed) {
+            statusBadge = '<div class="check-badge passed">Розыгрыш прошёл</div>';
+        } else if (receipt.drawing_status && receipt.drawing_status.days_left !== undefined) {
+            if (receipt.drawing_status.days_left > 0) {
+                statusBadge = `<div class="check-badge active">Через ${this.pluralizeDays(receipt.drawing_status.days_left)}</div>`;
+            } else {
+                statusBadge = '<div class="check-badge today">Сегодня розыгрыш!</div>';
+            }
+        }
+
+        div.innerHTML = `
+            <img src="${receipt.image_url}" alt="Чек" class="check-image">
+            ${statusBadge}
+            <div class="check-date">${receipt.created_at}</div>
+            <button class="delete-check" data-id="${receipt.id}">
+                <img src="assets/close-icon.png" alt="Удалить">
+            </button>
+        `;
+
+        return div;
+    },
 
     // ===== Удаление чека =====
     async deleteReceipt(id) {
-        if (!confirm(this.getLang('receipt.confirm.delete'))) return;
+        if (!confirm('Удалить этот чек?')) return;
 
         try {
             const response = await fetch(`/receipts/${id}`, {
@@ -396,24 +423,21 @@ const Receipts = {
             const result = await response.json();
 
             if (result.success) {
-                // Удаляем элемент из DOM
                 const item = document.querySelector(`.check-item[data-id="${id}"]`);
                 if (item) item.remove();
-
-                // Обновляем список
                 this.loadUserReceipts();
             } else {
-                this.showError(result.message || this.getLang('receipt.error.delete'));
+                this.showError(result.message || 'Ошибка удаления');
             }
         } catch (error) {
             console.error('Ошибка:', error);
-            this.showError(this.getLang('receipt.error.connection'));
+            this.logError('delete_receipt_error', error.message, null, { receipt_id: id });
+            this.showError('Ошибка соединения');
         }
     },
 
-    // ===== Инициализация кнопок удаления (для статичных) =====
+    // ===== Инициализация кнопок удаления =====
     initDeleteButtons() {
-        // Для динамически созданных кнопок используем делегирование
         document.addEventListener('click', (e) => {
             if (e.target.closest('.delete-check')) {
                 const btn = e.target.closest('.delete-check');
@@ -437,7 +461,6 @@ const Receipts = {
 
     // ===== Показ ошибки =====
     showError(message) {
-        // Можно сделать красивее потом
         alert(message);
     },
 };

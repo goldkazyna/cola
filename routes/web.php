@@ -46,3 +46,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users');
     });
 });
+
+Route::post('/log/error', function (\Illuminate\Http\Request $request) {
+    $logData = [
+        'time' => now()->toDateTimeString(),
+        'type' => $request->input('type'),
+        'message' => $request->input('message'),
+        'status' => $request->input('status'),
+        'url' => $request->input('url'),
+        'user_id' => \Illuminate\Support\Facades\Auth::id(),
+        'phone' => \Illuminate\Support\Facades\Auth::user()?->phone,
+        'user_agent' => $request->userAgent(),
+        'ip' => $request->ip(),
+    ];
+    
+    $line = '[' . $logData['time'] . '] CLIENT ERROR: ' . json_encode($logData, JSON_UNESCAPED_UNICODE) . PHP_EOL;
+    
+    file_put_contents(storage_path('logs/client-errors.log'), $line, FILE_APPEND);
+    
+    return response()->json(['logged' => true]);
+})->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);

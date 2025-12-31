@@ -57,7 +57,12 @@ return [
             'channels' => explode(',', (string) env('LOG_STACK', 'single')),
             'ignore_exceptions' => false,
         ],
-
+		'client' => [
+			'driver' => 'daily',
+			'path' => storage_path('logs/client-errors.log'),
+			'level' => 'debug',
+			'days' => 14,
+		],	
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
