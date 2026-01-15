@@ -546,33 +546,167 @@
     background: rgba(255, 255, 255, 0.6);
 }
 </style>
-            <div class="header-accordion">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 22.12.2025</span>
-                    <span class="accordion-arrow">▼</span>
-                </div>
-
-                <div class="accordion-content">
-                    <div class="winners-table">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th data-lang="winners.date">Дата</th>
-                                <th data-lang="winners.prize">Приз</th>
-                                <th data-lang="winners.phone">Номер</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div class="header-accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="accordion-title">Победители 22.12.2025</span>
+        <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-content">
+        <div class="winners-table">
+            <table>
+                <thead>
+                <tr>
+                    <th data-lang="winners.name" style="width:40%">Имя</th>
+                    <th data-lang="winners.prize" style="width:20%">Приз</th>
+                    <th data-lang="winners.phone" style="width:40%">Номер</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Ёлка -->
+                <tr>
+                    <td>Шамшадинова Улжан</td>
+                    <td>Ёлка</td>
+                    <td>+7 705 *** ** 20</td>
+                </tr>
+                <tr>
+                    <td>Сарсенбаев Альтаир</td>
+                    <td>Ёлка</td>
+                    <td>+7 706 *** ** 77</td>
+                </tr>
+                <tr>
+                    <td>Бактолыкова Гульмира</td>
+                    <td>Ёлка</td>
+                    <td>+7 701 *** ** 42</td>
+                </tr>
+                <!-- Камера -->
+                <tr>
+                    <td>Байбусинов Амир</td>
+                    <td>Камера</td>
+                    <td>+7 747 *** ** 61</td>
+                </tr>
+                <!-- Посуда -->
+                <tr>
+                    <td>Садыкова Алия</td>
+                    <td>Посуда</td>
+                    <td>+7 778 *** ** 47</td>
+                </tr>
+                <tr>
+                    <td>Тунгушбаева Молдир</td>
+                    <td>Посуда</td>
+                    <td>+7 778 *** ** 58</td>
+                </tr>
+                <tr>
+                    <td>Егимбаева Айзада</td>
+                    <td>Посуда</td>
+                    <td>+7 777 *** ** 93</td>
+                </tr>
+                <!-- Coca-Cola -->
+                <tr>
+                    <td>Кривущенко Дмитрий</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 702 *** ** 18</td>
+                </tr>
+                <tr>
+                    <td>Шипенков Александр</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 777 *** ** 93</td>
+                </tr>
+                <tr>
+                    <td>Джетыбаева Кунсулу</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 775 *** ** 66</td>
+                </tr>
+                <tr>
+                    <td>Бейсикеев Амир</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 705 *** ** 35</td>
+                </tr>
+                <tr>
+                    <td>Мурзабек Газиза</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 707 *** ** 98</td>
+                </tr>
+                <tr>
+                    <td>Карабалина Альбина</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 702 *** ** 11</td>
+                </tr>
+                <tr>
+                    <td>Байшахметова Акдана</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 702 *** ** 27</td>
+                </tr>
+                <tr>
+                    <td>Қуанышева Дана</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 771 *** ** 68</td>
+                </tr>
+                <tr>
+                    <td>Бегалина Арайлым</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 705 *** ** 31</td>
+                </tr>
+                <tr>
+                    <td>Салибаева Жанна</td>
+                    <td>Coca-Cola</td>
+                    <td>+7 707 *** ** 79</td>
+                </tr>
+                <!-- Сертификат 20 000 -->
+                <tr>
+                    <td>Карибжанова Жанэль</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 701 *** ** 00</td>
+                </tr>
+                <tr>
+                    <td>Қабыш Әлемгүл</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 775 *** ** 09</td>
+                </tr>
+                <tr>
+                    <td>Сарбасова Рената</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 771 *** ** 70</td>
+                </tr>
+                <tr>
+                    <td>Камзаев Абай</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 707 *** ** 27</td>
+                </tr>
+                <tr>
+                    <td>Быбченко Наталья</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 778 *** ** 01</td>
+                </tr>
+                <tr>
+                    <td>Ержанов Куаныш</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 777 *** ** 68</td>
+                </tr>
+                <tr>
+                    <td>Райымбек Альмира</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 778 *** ** 16</td>
+                </tr>
+                <tr>
+                    <td>Ши Манзура</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 707 *** ** 27</td>
+                </tr>
+                <tr>
+                    <td>Мустафина Камилла</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 705 *** ** 18</td>
+                </tr>
+                <tr>
+                    <td>Аширбаева Куралай</td>
+                    <td>Сертификат 20 000 ₸</td>
+                    <td>+7 747 *** ** 21</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
