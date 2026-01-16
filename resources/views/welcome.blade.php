@@ -738,7 +738,7 @@
 
             <div class="header-accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <span class="accordion-title">Победители 05.01.2026</span>
+                    <span class="accordion-title">Победители 16.01.2026</span>
                     <span class="accordion-arrow">▼</span>
                 </div>
 
