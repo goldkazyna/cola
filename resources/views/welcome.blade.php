@@ -129,7 +129,7 @@
                 </div>
             </div>
 
-            <div class="auth-checks-add">
+            <!--<div class="auth-checks-add">
                 <div class="auth-header">
                     <h2 data-lang="upload.title">ЗАГРУЗИТЬ ЧЕК</h2>
                 </div>
@@ -157,7 +157,7 @@
                         <button type="submit" class="upload-submit" disabled data-lang="upload.submit">ОТПРАВИТЬ</button>
                     </form>
                 </div>
-            </div>
+            </div>-->
 
             <div class="auth-upload-success">
                 <div class="auth-header">
@@ -321,7 +321,7 @@
         </div>
 
         <div class="blockDown">
-            <a class="downCheck" href=""><span data-lang="main.upload">Загрузить чек</span> <img src="assets/arrowRight.png"> </a>
+            <!--<a class="downCheck" href=""><span data-lang="main.upload">Загрузить чек</span> <img src="assets/arrowRight.png"> </a>-->
         </div>
 
     </div>
