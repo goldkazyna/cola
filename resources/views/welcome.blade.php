@@ -121,11 +121,11 @@
 						<!-- Чеки загружаются динамически -->
 					</div>
 
-                    <div class="checks-info">
+                    <!--<div class="checks-info">
                         <div class="blockDown">
                             <a class="downChecks" href=""><span data-lang="checks.upload">Загрузить чек</span> <img src="assets/arrowWhiteR.png"> </a>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
 
@@ -205,7 +205,7 @@
             <img src="assets/wolna.png" alt="" class="mainBlockImgWolna">
         </div>
         <div class="blockDown">
-            <a class="downCheck upload-link" href=""><span data-lang="main.upload">Загрузить чек</span> <img src="assets/arrowRight.png"> </a>
+            <!--<a class="downCheck upload-link" href=""><span data-lang="main.upload">Загрузить чек</span> <img src="assets/arrowRight.png"> </a>-->
         </div>
     </div>
 

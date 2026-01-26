@@ -14,6 +14,12 @@ class ReceiptController extends Controller
     // Загрузка чека
     public function upload(Request $request)
     {
+		    
+		return response()->json([
+			'success' => false,
+			'message' => 'Акция завершена. Загрузка чеков больше недоступна.',
+		], 403);
+		
         if (!Auth::check()) {
             return response()->json([
                 'success' => false,
